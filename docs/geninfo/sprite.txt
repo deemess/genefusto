@@ -1,0 +1,17 @@
+
+                 GameSite's Genesis Sprite Table Description.
+                                       
+                                  [INLINE]
+                                      
+   The Sprite Table:
+   Sprite Y position (2 bytes). Add $0080 to actual position.
+   Sprite Size (1 Byte). 0000wwhh. ww amd hh are tile widths amd heights,
+   limited to 3 tiles x 3 tiles (24x24)
+   Pointer (1 Byte) Number of next sprite structure (0 is end). Used for
+   priority.
+   1st Tile Number (2 Bytes) Tile number of upper left corner. Same
+   format as screen tile.
+   Sprite X position (2 Bytes) Add $0080 to actual position.
+   
+                                    Back
+                      Back to the programming tutorial

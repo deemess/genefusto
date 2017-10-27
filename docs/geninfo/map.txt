@@ -1,0 +1,17 @@
+
+                      GameSite's Genesis Map Description.
+                                       
+                                  [INLINE]
+                                      
+   The Screen map can be 32 - 128 tiles across, (64 - 256 bytes per
+   line.) and 32 - 128 lines high. The can be selected by register #16.
+   The Screen Map format:
+   PR | P1 | P0 | VF | HF | XXXXXXXXXX
+   PR = Priority bit. If bit is set tile is shown in front of sprites.
+   P1 - P0 = Sets palette of tile. (0 - 3)
+   VF - Vertically flips tile.
+   HF - Horizontally flips tile.
+   The last ten bits are the tile number (0 - 2047)
+   
+                                    Back
+                      Back to the programming tutorial

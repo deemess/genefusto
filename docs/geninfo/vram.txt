@@ -1,0 +1,25 @@
+
+                     GameSite's Genesis VRAM access modes.
+                                       
+                                  [INLINE]
+                                      
+VRAM access mode:
+   X1 |  X0 | A13 | A12 | A11 | A10 | A09 | A08
+  A07 | A06 | A05 | A04 | A03 | A02 | A01 | A00
+
+   0  |  0  |  0  |  0  |  0  |  0  |  0  |  0
+   X5 |  X4 |  X3 |  X2 |  0  |  0  | A15 | A14
+
+The A bits are address bits.
+The X bits are control bits.
+
+                    X5 | X4 | X3 | X2 | X1 | X0
+VRAM Writes          0 |  0 |  0 |  0 |  0 |  1 ($4xxx00xx)
+Color RAM Writes     0 |  0 |  0 |  0 |  1 |  1 ($Cxxx00xx)
+Vert Scr. Ram Writes 0 |  0 |  0 |  1 |  0 |  1 ($4xxx001x)
+VRAM Reads           0 |  0 |  0 |  0 |  0 |  0 ($xxxx00xx)
+Color RAM Reads      0 |  0 |  1 |  0 |  0 |  0 ($xxxx002x)
+Vert Scr. Ram Reads  0 |  0 |  0 |  1 |  0 |  0 ($xxxx001x)
+
+                                    Back
+                      Back to the programming tutorial

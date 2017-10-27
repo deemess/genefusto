@@ -1,0 +1,365 @@
+
+                GameSite's Genesis Programming Tutorial Part 2.
+                                       
+                                  [INLINE]
+                                      
+  This tutorial describes the steps necessary to setup the Genesis for
+  operation. This tutorial describes the inner workings of this month's game
+  selection, Racing Demo.
+  
+   Download the Genesis C compiler by Paul Lee We'll try to have a
+   tutorial covering programming the Genesis in C soon. The example
+   programs provide plenty of info.
+   Download Genesis Graphic/Map Converters. These utilities convert from
+   WGT Sprite and Map editors to the Genesis, These were used to process
+   all graphics in the demo.
+   Now on to this months tutorial. This tutorial starts where the last
+   one left off.
+
+ColorChange:
+        move.w   #$8f02,$c00004
+
+   Here we set up VRAM to increment it's address by two for each write.
+   This is set to 2 when words are written to VRAM, and 1 when bytes are
+   written.
+
+        move.l    #$c0000000,$c00004
+
+   This points VRAM to the VRAM ColorTable. All writes after this go to
+   the color table. The color Table is 128 bytes long. The Palette is
+   divided into four 16 color palettes. Each palette color is a word
+   long. The format of the palette is $0bgr. Only the top 3 bits of each
+   color is used. For example a bright blue color would be $0E00. A
+   bright red color would be $000E.
+
+        lea      carpal(pc),a5
+        move.w   #palend-carpal,d5
+        lsr      #1,d5
+VramPal:
+        move.w   (a5)+,$c00000
+        dbra     d5,VramPal
+
+   This is just a word transfer from the Car Palette to the first
+   palette.
+
+        move.l   #$40000000,$c00004
+
+   This points VRAM to Location $0. See VRAM access control for more info
+   on the format of the control values.
+
+        lea      car(pc),a5
+        move.w   #carpal-car,d5
+        lsr      #1,d5
+VramCar:
+        move.w   (a5)+,$c00000
+        dbra     d5,VramCar
+
+   This transfers the car images to VRAM. See the format of tiles and
+   sprites for more info.
+
+        lea      Sprite(pc),a5
+        move.l   #$ff0000,a4
+        move.w   #4,d0
+SpriteTableMove:
+        move.w   (a5)+,(a4)+
+        dbra     d0,SpriteTableMove
+
+   This transfer our sprite table from 'ROM' to RAM. This allows us to
+   change the sprites positions. See sprite table for more info on sprite
+   tables.
+
+        move.l   #$40000003,$c00004
+        move.w   #mapend-map,d5
+        lsr      #1,d5
+        lea      map(pc),a5
+
+VramMap:
+        move.w   (a5)+,$c00000
+        dbra     d5,VramMap
+
+   This transfer the map to location $c000 in VRAM. See map format for
+   more info.
+
+        moveq     #$40,d0
+        move.b    d0,$a10009
+        move.b    d0,$a1000b
+        move.b    d0,$a1000d
+
+   This sets up the joysticks.
+        move.b    #0,$ff0040    ; Syncs everything to VBI.
+        move.b    #0,$ff0041    ; Joystick Byte
+        move.w    #0,$ff00f0    ; Tmp Variable
+        move.b    #0,$ff00f2    ; BOOL variable to indicate collision
+        move.w    #512,$ff00fa  ; Horiz Global Position
+        move.w    #64,$ff00fc   ; Vert  Global Position
+        move.b    #0,$ff00fe    ; Facing Direction
+        move.b    #0,$ff00ff    ; Variable to read joystick every 8 frames
+
+   This sets up variables used by the program. The variables are set up
+   in ram.
+
+        move.w    #$8164,$c00004
+        and.w     #$f8ff,sr
+
+   This sets up and enables the Vert. Blanking Interrupt. Recall that the
+   VBL keyword identifies the code to run when a Vert. Blanking Interrupt
+   occurs. The next section of code reads the joystick and moves the
+   screen/car accordingly. Location $ff0041 is filled with joystick info
+   by the Vert. Blanking Interrupt routine. The format of $ff0041 is
+   S|A|C|B|R|L|D|U.
+   Where: S - Start
+   A - A Button
+   C - C Button
+   B - B Button
+   R - Right
+   L - Left
+   D - Down
+   U - Up
+
+MoveIt:
+        move.b  $ff0041,d0
+        move.b  d0,d5
+        and.b   #$40,d5
+        beq     NotA
+
+        jsr     Collision
+
+   The Collision takes the current facing direction, which is held in Ram
+   location $ff00fe, and sees if going in that direction would go into a
+   non road tile. The collision routines doesn't completely work
+   correctly.
+
+        cmp.b   #0, $ff00f2
+        beq     NotA
+
+   Location $ff00f2 is the Ram location which indicates if a collision
+   happened.
+
+        cmp.b   #0,$ff00fe
+        bne.s   ULeft
+
+        sub.w   #1, $ff00fc
+        cmp.w   #64,$ff00fc
+        ble.s   NoScrollUp
+
+   Location $ff0ffc stores the current vertical scroll position. This
+   checks to see that we aren't scrolling past the upper limit. Letting
+   the scroll position go below 64 would show the bottom lines of the
+   map. The value of 64 was chosen so the screen scroll value would
+   change as the car moves up the screen, without worrying about wrapping
+   around.
+
+        cmp.w   #352,$ff00fc
+        bge.s   NoScrollUp
+
+   This checks to ensure we don't go past the bottom line and into the
+   top lines.
+
+        move.l  #$40000010,$c00004
+
+   We need to set the VRAM to access the Vertical Scroll Ram.
+        move.w  $ff00fc,d5
+        sub.w   #64,d5
+        move.w  d5,$c00000
+
+   We have to subtract out the 64 from the scroll value and place it in
+   the Scroll Ram.
+
+        bra.s   ULeft
+
+NoScrollUp:
+        cmp.w   #$0080,$ff0000
+
+   Location $ff0000 in the Sprite Y position in ram.
+        beq.s   ULeft
+        sub.w   #$0001,$ff0000
+
+ULeft:
+        cmp.b   #1,$ff00fe
+        bne     Left
+
+        code removed...
+
+NoScrollUL:
+        cmp.w   #$0080,$ff0000
+        beq.s   CheckULScroll
+        sub.w   #$0001,$ff0000
+
+CheckULScroll:
+        add.w   #$0001,$ff00fa
+        cmp.w   #512, $ff00fa
+        bge.s   NoScrollUL2
+        cmp.w   #304, $ff00fa
+        ble.s   NoScrollUL2
+
+   Location $ff00fa is the horizontal scroll position. It ranges from
+   512(left) to 0 (right). Going lower than 304 shows the left size of
+   the screen.
+
+        move.l  #$6c000002,$c00004
+
+   We need to set the VRAM address to $ac00. The Genesis stores the
+   vertical scroll table in a special area, like the color ram, but the
+   horizontal scroll ram is in VRAM. The setting of the location for the
+   horizontal scroll area is discussed in the first part of this tutorial
+
+        code removed...
+
+        cmp.w   #376,$ff0006
+        beq.s   NotA
+
+        add.w   #$0001,$ff0006
+
+   Location $ff0006 is the Sprite X position in the SpriteTable.
+NotA:
+        add.b   #1,$ff00ff
+        cmp.b   #8,$ff00ff
+
+        bne     NextLoop
+        clr.b   $ff00ff
+
+   Location is a counter that is incremented each Vert. Blanking
+   Interrupt. If it's not used the cars spins too quickly.
+
+NotZero:
+        move.b  d0,d5
+        and.b   #4,d5
+        beq.s   NotLeft
+
+   These routines spin the sprite left and right. There are eight frames
+   of animation for the car.
+
+        move.b  $ff00fe,d5
+        cmp.b   #7,d5
+        bne.s   NormalLeft
+        move.b  #0,d5
+        bra.s   SkipLeft
+
+NormalLeft
+        add.b   #1,d5
+SkipLeft
+        move.b  d5,$ff00fe
+        mulu    #9,d5
+        add     #96,d5
+
+        move.b  d5,$ff0005
+
+   Each sprite takes 9 tiles. The frame is multiplied by nine and added
+   to 96 to get the starting tile for the sprite. This number is stored
+   in the sprite table.
+
+        code removed...
+
+NextLoop:
+        cmp.b   #1,$ff0040
+        beq.s   NextLoop
+        move.b  #1,$ff0040
+        bra     MoveIt
+
+   This waits until the Vert Blanking Routine sets location $ff0040 to
+   zero before continuing. This makes it so the sprite doesn't flash or
+   jump as it moves.
+
+        VBL
+
+   This marks the beginning of the Vert. Blanking Interrupt.
+        movem.l  d0-d7/a0-a4,-(a6)
+SpriteRoutine:
+        move.l   #$68000002,$c00004
+
+   This set the VRAM address to $a800. The sprite table is stored here.
+   The table is a maximum of 1k in size. Only the blocks for the number
+   of sprites used needs to be transferred.
+
+        move.w   #4,d0
+        move.l   #$ff0000,a4
+SpriteTable:
+        move.w   (a4)+,$c00000
+        dbra     d0,SpriteTable
+        and.w    #$f8ff,sr
+
+   The above statement resets the interrupts.
+        movem.l  (a6)+,d0-d7/a0-a4
+        move.b   #0,$ff0040
+        move.b   #0,d0
+        move.b   #0,d1
+
+   The followiug routine reads the joystick. This came from the Sega
+   Programming FAQ.
+
+        move.b   #$40,$a10003
+        nop
+        nop
+        move.b   $a10003,d1
+        andi.b   #$3f,d1
+        move.b   #$00,$a10003
+        nop
+        nop
+        move.b   $a10003,d0
+        and.b    #$30,d0
+        lsl.b    #2,d0
+        or.b     d1,d0
+        not.b    d0
+        move.b   d0,$ff0041
+        rte
+
+   This is the routine that checks the tile in which the car is on to
+   determine if it would be off the road or not. The road tiles start at
+   60. It doesn't completely work correctly. If you find the problem
+   please e-mail me .
+
+Collision:
+
+Up:
+        cmp.b   #0,$ff00fe
+        bne.s   UpLeft
+
+        move.w  $ff00fc, d5
+        sub.w   #64, d5
+
+        add.w   $ff0000, d5
+        sub.w   #$0080, d5
+        add.w   #7, d5
+        lsr.w   #3, d5
+        lsl.w   #6, d5
+
+        add.w   #64, d5
+        move.w  d5, $ff00f0
+
+        move.w  #512, d5
+        sub.w   $ff00fa, d5
+
+        add.w   $ff0006, d5
+        sub.w   #$0080, d5
+        add.w   #7, d5
+        lsr.w   #3, d5
+
+        add.w   $ff00f0, d5
+
+        lea     map(pc),a5
+
+        lsl.w   #1, d5
+        add.w   d5, a5
+
+        move.w  (a5), d5
+
+        and.w   #$03ff, d5
+        cmp.w   #60, d5
+        bge.s   GoodTileUp
+
+        move.b  #00, $ff00f2
+        rts
+
+GoodTileUp:
+        move.b  #01, $ff00f2
+        rts
+
+        code removed...
+
+   This concludes this tutorial on Genesis programming. You should have
+   enough info to program a simple Genesis game. If you have any
+   questions E-mail me. I'll send you an answer, and put up a page with
+   questions I receive.
+   
+                                    Back
+                            Back to Welcome Page
