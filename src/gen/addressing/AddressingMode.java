@@ -1,6 +1,6 @@
 package gen.addressing;
 
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public interface AddressingMode {
@@ -13,6 +13,6 @@ public interface AddressingMode {
 	long getWord(Operation o);
 	long getLong(Operation o);
 	
-	void calculateAddress(Operation o, Size size);
+	void calculateAddress(Operation o, OperationSize size);
 	
 }

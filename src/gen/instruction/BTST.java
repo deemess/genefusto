@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class BTST implements GenInstructionHandler {
 
@@ -199,7 +199,7 @@ public class BTST implements GenInstructionHandler {
 		int destMode = (opcode >> 3) & 0x7;
 		int destReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, destMode, destReg);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long bitNumber = cpu.getDByte(dataRegister);
@@ -213,7 +213,7 @@ public class BTST implements GenInstructionHandler {
 		int destMode = (opcode >> 3) & 0x7;
 		int destReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, destMode, destReg);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long bitNumber = cpu.getDLong(dataRegister);
@@ -226,13 +226,13 @@ public class BTST implements GenInstructionHandler {
 		int destReg = (opcode & 0x7);
 		int destMode = (opcode >> 3) & 0x7;
 		
-		long bitNumber = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long bitNumber = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		bitNumber = bitNumber & 0xFF;
 		bitNumber &= 7;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, destMode, destReg);
 		long data = o.getAddressingMode().getByte(o);
 		
 		calcFlags(data, (int) bitNumber);
@@ -242,13 +242,13 @@ public class BTST implements GenInstructionHandler {
 		int destReg = (opcode & 0x7);
 		int destMode = (opcode >> 3) & 0x7;
 		
-		long bitNumber = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long bitNumber = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		bitNumber = bitNumber & 0xFF;
 		bitNumber &= 31;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, destMode, destReg);
 		long data = o.getAddressingMode().getLong(o);
 		
 		calcFlags(data, (int) bitNumber);

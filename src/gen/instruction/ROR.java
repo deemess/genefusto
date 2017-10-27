@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ROR implements GenInstructionHandler {
 
@@ -223,7 +223,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDByte(register, res);
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, carry);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, carry);
 	}
 	
 	private void ROLRegisterWord(int opcode) {
@@ -254,7 +254,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDWord(register, res);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 	
 	private void ROLRegisterLong(int opcode) {
@@ -285,7 +285,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDLong(register, res);
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, carry);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, carry);
 	}
 	
 	private void RORRegisterByte(int opcode) {
@@ -320,7 +320,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDByte(register, res);
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, carry);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, carry);
 	}
 	
 	private void RORRegisterWord(int opcode) {
@@ -355,7 +355,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDWord(register, res);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 
 	private void RORRegisterLong(int opcode) {
@@ -390,7 +390,7 @@ public class ROR implements GenInstructionHandler {
 		
 		cpu.setDLong(register, res);
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, carry);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, carry);
 	}
 
 	void calcFlags(long data, long msb, long maxSize, boolean carry) {

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class AND implements GenInstructionHandler {
 
@@ -217,14 +217,14 @@ public class AND implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int destRegister = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long toAnd = cpu.getDByte(destRegister);
 		long res = toAnd & data;
 		cpu.setDByte(destRegister, res);
 		
-		calcFlags(res, Size.BYTE.getMsb());
+		calcFlags(res, OperationSize.BYTE.getMsb());
 	}
 
 	private void ANDSourceEAWord(int opcode) {
@@ -232,14 +232,14 @@ public class AND implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int destRegister = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long toAnd = cpu.getDWord(destRegister);
 		long res = toAnd & data;
 		cpu.setDWord(destRegister, res);
 		
-		calcFlags(res, Size.WORD.getMsb());
+		calcFlags(res, OperationSize.WORD.getMsb());
 	}
 	
 	private void ANDSourceEALong(int opcode) {
@@ -247,14 +247,14 @@ public class AND implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int destRegister = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long toAnd = cpu.getDLong(destRegister);
 		long res = toAnd & data;
 		cpu.setDLong(destRegister, res);
 		
-		calcFlags(res, Size.LONG.getMsb());
+		calcFlags(res, OperationSize.LONG.getMsb());
 	}
 	
 	private void ANDDestEAByte(int opcode) {
@@ -264,14 +264,14 @@ public class AND implements GenInstructionHandler {
 		
 		long toAnd = cpu.getDByte(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long res = toAnd & data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.BYTE);
 		
-		calcFlags(res, Size.BYTE.getMsb());
+		calcFlags(res, OperationSize.BYTE.getMsb());
 	}
 	
 	private void ANDDestEAWord(int opcode) {
@@ -281,14 +281,14 @@ public class AND implements GenInstructionHandler {
 		
 		long toAnd = cpu.getDWord(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long res = toAnd & data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 		
-		calcFlags(res, Size.WORD.getMsb());
+		calcFlags(res, OperationSize.WORD.getMsb());
 	}
 	
 	private void ANDDestEALong(int opcode) {
@@ -298,14 +298,14 @@ public class AND implements GenInstructionHandler {
 		
 		long toAnd = cpu.getDLong(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long res = toAnd & data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.LONG);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.LONG);
 		
-		calcFlags(res, Size.LONG.getMsb());
+		calcFlags(res, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

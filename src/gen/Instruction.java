@@ -4,14 +4,14 @@ public abstract class Instruction {
 
 	public Instruction() {
 	}
-	
-	Size mapSize(int siz) {
+
+	OperationSize mapSize(int siz) {
 		if (siz == 0b01) {
-			return Size.BYTE;
+			return OperationSize.BYTE;
 		} else if (siz == 0b11) {
-			return Size.WORD;
+			return OperationSize.WORD;
 		} else if (siz == 0b10) {
-			return Size.LONG;
+			return OperationSize.LONG;
 		}
 		return null;
 	}
@@ -20,13 +20,13 @@ public abstract class Instruction {
 //	00->one Byte operation
 //	01->one Word operation
 //	10->one Long operation
-	Size mapAlternateSize(int size) {
+OperationSize mapAlternateSize(int size) {
 		if (size == 0b00) {
-			return Size.BYTE;
+			return OperationSize.BYTE;
 		} else if (size == 0b01) {
-			return Size.WORD;
+			return OperationSize.WORD;
 		} else if (size == 0b10) {
-			return Size.LONG;
+			return OperationSize.LONG;
 		}
 		return null;
 	}
@@ -36,13 +36,13 @@ public abstract class Instruction {
 //	~~~~	~~~~	~~~~
 //	000		001		010	(Dn) - (<ea>) -> Dn
 //	100		101		110	(<ea>) - (Dn) -> <ea>
-	Size mapFromOpMode(int size) {
+OperationSize mapFromOpMode(int size) {
 		if (size == 0b000 || size == 0b100) {
-			return Size.BYTE;
+			return OperationSize.BYTE;
 		} else if (size == 0b001 || size == 0b101) {
-			return Size.WORD;
+			return OperationSize.WORD;
 		} else if (size == 0b010 || size == 0b110) {
-			return Size.LONG;
+			return OperationSize.LONG;
 		}
 		return null;
 	}

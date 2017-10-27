@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class Scc implements GenInstructionHandler {
 
@@ -112,15 +112,15 @@ public class Scc implements GenInstructionHandler {
 		if (cc == 1) {
 			taken = false;	// override del caso 1
 		} else {
-			taken = cpu.evaluateBranchCondition(cc, Size.BYTE);
+			taken = cpu.evaluateBranchCondition(cc, OperationSize.BYTE);
 		}
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = 0;
 		if (taken) {
 			data = 0xFF;
 		}
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 	}
 
 }

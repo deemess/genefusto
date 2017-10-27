@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class BCC implements GenInstructionHandler {
 
@@ -83,7 +83,7 @@ public class BCC implements GenInstructionHandler {
 	private void bccByte(int opcode) {
 		int cc = (opcode >> 8) & 0xF;
 
-		boolean taken = cpu.evaluateBranchCondition(cc, Size.BYTE);
+		boolean taken = cpu.evaluateBranchCondition(cc, OperationSize.BYTE);
 
 		long offset = opcode & 0xFF;
 		if ((offset & 0x80) == 0x80) {
@@ -100,9 +100,9 @@ public class BCC implements GenInstructionHandler {
 	private void bccWord(int opcode) {
 		int cc = (opcode >> 8) & 0xF;
 		
-		boolean taken = cpu.evaluateBranchCondition(cc, Size.WORD);
+		boolean taken = cpu.evaluateBranchCondition(cc, OperationSize.WORD);
 
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 		if ((offset & 0x8000) == 0x8000) {
 			offset |= 0xFFFF_0000;

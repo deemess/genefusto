@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class CMP implements GenInstructionHandler {
 
@@ -122,7 +122,7 @@ public class CMP implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long toSub = cpu.getDByte(dataRegister);
@@ -144,7 +144,7 @@ public class CMP implements GenInstructionHandler {
 			cpu.clearC();
 		}
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF);
 	}
 	
 	private void CMPWord(int opcode) {
@@ -152,7 +152,7 @@ public class CMP implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long toSub = cpu.getDWord(dataRegister);
@@ -174,7 +174,7 @@ public class CMP implements GenInstructionHandler {
 			cpu.clearC();
 		}
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF);
 	}
 	
 	private void CMPLong(int opcode) {
@@ -182,7 +182,7 @@ public class CMP implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long toSub = cpu.getDLong(dataRegister);
@@ -204,7 +204,7 @@ public class CMP implements GenInstructionHandler {
 			cpu.clearC();
 		}
 		
-		calcFlags(res, Size.LONG.getMsb(), Size.LONG.getMax());
+		calcFlags(res, OperationSize.LONG.getMsb(), OperationSize.LONG.getMax());
 	}
 	
 	void calcFlags(long data, long msb, long maxSize) {	// TODO merge con los flags de arriba

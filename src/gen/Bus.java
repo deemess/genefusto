@@ -38,7 +38,7 @@ public class Bus {
 		// de a 2 bytes desde la direccion inicial (porque aumenta de a 4, dividido 2 = 2)
 	}
 	
-	public long read(long address, Size size) {
+	public long read(long address, OperationSize size) {
 		address = address & 0xFF_FFFF;	// el memory map llega hasta ahi
 		long data;
 		
@@ -59,7 +59,7 @@ public class Bus {
 				address = (banks[7] * 0x80000) + (address - 0x380000);
 			}
 			
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
 					address = address - 0x200000;
 					if (address < 0x200) {
@@ -72,7 +72,7 @@ public class Bus {
 					data = memory.readCartridgeByte(address);
 				}
 				
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
 					address = address - 0x200000;
 					data  = sram[(int) address] << 8;
@@ -100,7 +100,7 @@ public class Bus {
 		}
 		
 		if (address <= 0x3F_FFFF) {
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
 					address = address - 0x200000;
 					if (address < 0x200) {
@@ -113,7 +113,7 @@ public class Bus {
 					data = memory.readCartridgeByte(address);
 				}
 				
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
 					address = address - 0x200000;
 					data  = sram[(int) address] << 8;
@@ -143,7 +143,7 @@ public class Bus {
 			
 		} else if (address == 0xA10000 || address == 0xA10001) {	//	Version register (read-only word-long)
 			data = emu.getRegion();
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return data;
 			} else {
 				return data << 8 | data;
@@ -166,14 +166,14 @@ public class Bus {
 			}
 			
 		} else if (address == 0xA10008 || address == 0xA10009) {	//	Controller 1 control
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return joypad.readControlRegister1() & 0xFF;
 			} else {
 				return joypad.readControlRegister1();
 			}
 			
 		} else if (address == 0xA1000A || address == 0xA1000B) {	//	Controller 2 control
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return joypad.readControlRegister2() & 0xFF;
 			} else {
 				return joypad.readControlRegister2();
@@ -185,9 +185,9 @@ public class Bus {
 //			return 0;	//	FIXME hacer esto bien
 		
 		} else if (address == 0xC00000 || address == 0xC00002) {	// VDP Data
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return (vdp.readDataPort(size) >> 8);
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				return (vdp.readDataPort(size));
 			} else {
 				data  = vdp.readDataPort(size) << 16;
@@ -199,9 +199,9 @@ public class Bus {
 			
 		} else if (address == 0xC00004 || address == 0xC00006) {	// VDP Control
 			data = vdp.readControl(); 
-			if (size == Size.WORD) {
+			if (size == OperationSize.WORD) {
 				return data;
-			} else if (size == Size.BYTE) {
+			} else if (size == OperationSize.BYTE) {
 				return data >> 8;
 			} else {
 				throw new RuntimeException();
@@ -209,7 +209,7 @@ public class Bus {
 
 		} else if (address == 0xC00005 || address == 0xC00007) {
 			data = vdp.readControl(); 
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return data & 0xFF;
 			} else {
 				throw new RuntimeException("");
@@ -218,9 +218,9 @@ public class Bus {
 		} else if (address == 0xC00008 || address == 0xC00009) {
 			int v = vdp.line;
 			int h = new Random().nextInt(256);
-			if (size == Size.WORD) {
+			if (size == OperationSize.WORD) {
 				return (v << 8) | h;	//	VDP HV counter
-			} else if (size == Size.BYTE) {
+			} else if (size == OperationSize.BYTE) {
 				if (address == 0xC00008) {
 					return v;
 				} else {
@@ -229,9 +229,9 @@ public class Bus {
 			}
 			
 		} else if (address >= 0xFF0000) {
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				return memory.readRam(address);
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				data  = memory.readRam(address) << 8;
 				data |= memory.readRam(address + 1);
 				return data;
@@ -251,11 +251,11 @@ public class Bus {
 	}
 	
 //	https://wiki.megadrive.org/index.php?title=IO_Registers
-	public void write(long address, long data, Size size) {
+	public void write(long address, long data, OperationSize size) {
 		long addressL = (address & 0xFF_FFFF);
-		if (size == Size.BYTE) {
+		if (size == OperationSize.BYTE) {
 			data = data & 0xFF;
-		} else if (size == Size.WORD) {
+		} else if (size == OperationSize.WORD) {
 			data = data & 0xFFFF;
 		} else {
 			data = data & 0xFFFF_FFFFL;
@@ -265,12 +265,12 @@ public class Bus {
 			if (addressL >= 0x200000 && address <= 0x20FFFF && writeSram) {
 				addressL = addressL - 0x200000;
 				
-				if (size == Size.BYTE) {
+				if (size == OperationSize.BYTE) {
 					if (address < 0x200) {
 						sram[(int) addressL] = (int) data;
 					}
 					
-				} else if (size == Size.WORD) {
+				} else if (size == OperationSize.WORD) {
 					sram[(int) addressL] = (int) (data >> 8) & 0xFF;
 					sram[(int) addressL + 1] = (int) data & 0xFF;
 				} else {
@@ -286,9 +286,9 @@ public class Bus {
 			
 		} else if (addressL >= 0xA00000 && addressL <= 0xA0FFFF) {	//	Z80 addressing space
 			int addr = (int) (address - 0xA00000);
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				z80.writeByte(addr, data);
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				z80.writeWord(addr, data);
 			} else {
 				z80.writeWord(addr, data >> 16);
@@ -407,9 +407,9 @@ public class Bus {
 			
 		} else if (addressL == 0xC00004 || addressL == 0xC00005
 				|| addressL == 0xC00006 || addressL == 0xC00007) {	// word / long word
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				throw new RuntimeException();
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				vdp.writeControlPort(data);
 			} else {
 				vdp.writeControlPort(data >> 16);
@@ -423,12 +423,12 @@ public class Bus {
 		} else if (addressL >= 0xFF0000) {
 			long addr = (addressL & 0xFFFFFF) - 0xFF0000;
 			
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				memory.writeRam(addr, data);
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				memory.writeRam(addr, (data >> 8));
 				memory.writeRam(addr + 1, (data & 0xFF));
-			} else if (size == Size.LONG) {
+			} else if (size == OperationSize.LONG) {
 				memory.writeRam(addr, (data >> 24) & 0xFF);
 				memory.writeRam(addr + 1, (data >> 16) & 0xFF);
 				memory.writeRam(addr + 2, (data >> 8) & 0xFF);
@@ -498,18 +498,18 @@ public class Bus {
 			long ssp = cpu.SSP;
 			
 			ssp--;
-			write(ssp, oldPC & 0xFF, Size.BYTE);
+			write(ssp, oldPC & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 8) & 0xFF, Size.BYTE);
+			write(ssp, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 16) & 0xFF, Size.BYTE);
+			write(ssp, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 24), Size.BYTE);
+			write(ssp, (oldPC >> 24), OperationSize.BYTE);
 			
 			ssp--;
-			write(ssp, oldSR & 0xFF, Size.BYTE);
+			write(ssp, oldSR & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldSR >> 8) & 0xFF, Size.BYTE);
+			write(ssp, (oldSR >> 8) & 0xFF, OperationSize.BYTE);
 			
 			long address = readInterruptVector(0x78);
 			cpu.PC = address;
@@ -536,18 +536,18 @@ public class Bus {
 			//System.out.println("HINT ! Line: " + Integer.toHexString(vdp.line));
 			
 			ssp--;
-			write(ssp, oldPC & 0xFF, Size.BYTE);
+			write(ssp, oldPC & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 8) & 0xFF, Size.BYTE);
+			write(ssp, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 16) & 0xFF, Size.BYTE);
+			write(ssp, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldPC >> 24), Size.BYTE);
+			write(ssp, (oldPC >> 24), OperationSize.BYTE);
 			
 			ssp--;
-			write(ssp, oldSR & 0xFF, Size.BYTE);
+			write(ssp, oldSR & 0xFF, OperationSize.BYTE);
 			ssp--;
-			write(ssp, (oldSR >> 8) & 0xFF, Size.BYTE);
+			write(ssp, (oldSR >> 8) & 0xFF, OperationSize.BYTE);
 			
 			long address = readInterruptVector(0x70);
 			cpu.PC = address;

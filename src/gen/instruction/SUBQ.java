@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class SUBQ implements GenInstructionHandler {
 
@@ -134,14 +134,14 @@ public class SUBQ implements GenInstructionHandler {
 			toSub = 8;
 		}
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long tot = (data - toSub);
 		
-		cpu.writeKnownAddressingMode(o, tot, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, tot, OperationSize.BYTE);
 		
-		calcFlags(tot, data, toSub, Size.BYTE.getMsb(), Size.BYTE.getMax());
+		calcFlags(tot, data, toSub, OperationSize.BYTE.getMsb(), OperationSize.BYTE.getMax());
 	}
 	
 	private void SUBQWord(int opcode) {
@@ -154,7 +154,7 @@ public class SUBQ implements GenInstructionHandler {
 		}
 
 		if (mode != 1) {
-			Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+			Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 			long data = o.getAddressingMode().getWord(o);
 			if ((data & 0x8000) == 0x8000) {
 				data |= 0xFFFF_0000;
@@ -162,8 +162,8 @@ public class SUBQ implements GenInstructionHandler {
 			
 			long tot = (data - toSub);
 			
-			cpu.writeKnownAddressingMode(o, tot, Size.WORD);
-			calcFlags(tot, data, toSub, Size.WORD.getMsb(), Size.WORD.getMax());
+			cpu.writeKnownAddressingMode(o, tot, OperationSize.WORD);
+			calcFlags(tot, data, toSub, OperationSize.WORD.getMsb(), OperationSize.WORD.getMax());
 			
 		} else {		//	address register, siempre guarda longword y no calcula flags
 			long data = cpu.getALong(register);
@@ -182,16 +182,16 @@ public class SUBQ implements GenInstructionHandler {
 			toSub = 8;
 		}
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long tot = (data - toSub);
 
-		cpu.writeKnownAddressingMode(o, tot, Size.LONG);
+		cpu.writeKnownAddressingMode(o, tot, OperationSize.LONG);
 		
 		// if destination is An no cambian los flags
 		if (mode != 1) {
-			calcFlags(tot, data, toSub, Size.LONG.getMsb(), Size.LONG.getMax());
+			calcFlags(tot, data, toSub, OperationSize.LONG.getMsb(), OperationSize.LONG.getMax());
 		}
 	}
 	

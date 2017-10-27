@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class UNLK implements GenInstructionHandler {
 
@@ -63,7 +63,7 @@ public class UNLK implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		
 		long addr = cpu.getALong(register);
-		long fromSP = cpu.bus.read(addr, Size.LONG);
+		long fromSP = cpu.bus.read(addr, OperationSize.LONG);
 		
 		cpu.setALong(register, fromSP);
 		

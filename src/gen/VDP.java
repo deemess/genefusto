@@ -466,10 +466,10 @@ public class VDP {
 	
 	boolean dmaRequested;
 	
-	public void writeDataPort(int data, Size size) {
+	public void writeDataPort(int data, OperationSize size) {
 		this.dataPort = data;
 
-		if (size == Size.BYTE) {
+		if (size == OperationSize.BYTE) {
 			if (vramFill) {
 				if (vramMode == VramMode.vramWrite) {
 					vramWriteByte(data);
@@ -502,7 +502,7 @@ public class VDP {
 //				throw new RuntimeException("NOT IMPL !");
 			}
 			
-		} else if (size == Size.WORD) {
+		} else if (size == OperationSize.WORD) {
 			if (vramFill) {
 //				Performing a DMA fill does perform a normal VRAM write. After the VRAM write has been processed however, a DMA fill operation is triggered immediately after. Normal VRAM writes are always 16-bit, so the first write that is carried out when you try and start a DMA fill will always be 16-bit. The DMA fill operation that follows will perform 8-bit writes.
 				if (vramMode == VramMode.vramWrite) {
@@ -626,7 +626,7 @@ public class VDP {
 //			int data1 = (int) bus.read(sourceTrue);
 //			int data2 = (int) bus.read(sourceTrue + 1);
 			
-			int dataWord = (int) bus.read(sourceTrue, Size.WORD);
+			int dataWord = (int) bus.read(sourceTrue, OperationSize.WORD);
 			int data1 = dataWord >> 8;
 			int data2 = dataWord & 0xFF;
 			
@@ -2086,7 +2086,7 @@ public class VDP {
 		}
     }
 
-	public long readDataPort(Size size) {
+	public long readDataPort(OperationSize size) {
 		if (vramMode == VramMode.vramRead) {
 			long data = readVram(size);
 			return data;
@@ -2106,7 +2106,7 @@ public class VDP {
 		return 0;
 	}
 
-	private long readVram(Size size) {
+	private long readVram(OperationSize size) {
 		int index = nextFIFOReadEntry;
 		int address = addressPort;
 		
@@ -2145,7 +2145,7 @@ public class VDP {
 //		nextFIFOWriteEntry = index;
 	}
 	
-	private long readCram(Size size) {
+	private long readCram(OperationSize size) {
 		int index = nextFIFOReadEntry;
 		int address = addressPort;
 		
@@ -2188,7 +2188,7 @@ public class VDP {
 //		nextFIFOWriteEntry = index;
 	}
 	
-	private long readVsram(Size size) {
+	private long readVsram(OperationSize size) {
 		int index = nextFIFOReadEntry;
 		int address = addressPort;
 		

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVEP implements GenInstructionHandler {
 
@@ -113,7 +113,7 @@ public class MOVEP implements GenInstructionHandler {
 		int addrReg = opcode & 0x7;
 		int dataReg = (opcode >> 9) & 0x7;
 		
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		if ((offset & 0x8000) > 0) {
 			offset = offset | 0xFFFF_0000L;
 		}
@@ -123,8 +123,8 @@ public class MOVEP implements GenInstructionHandler {
 		long addr = cpu.getALong(addrReg);
 		addr += offset;
 		
-		long data  = cpu.bus.read(addr, Size.BYTE) << 8;
-			 data |= cpu.bus.read(addr + 2, Size.BYTE);
+		long data  = cpu.bus.read(addr, OperationSize.BYTE) << 8;
+			 data |= cpu.bus.read(addr + 2, OperationSize.BYTE);
 
 		 cpu.setDWord(dataReg, data);
 	}
@@ -133,7 +133,7 @@ public class MOVEP implements GenInstructionHandler {
 		int addrReg = opcode & 0x7;
 		int dataReg = (opcode >> 9) & 0x7;
 		
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		if ((offset & 0x8000) > 0) {
 			offset = offset | 0xFFFF_0000L;
 		}
@@ -143,10 +143,10 @@ public class MOVEP implements GenInstructionHandler {
 		long addr = cpu.getALong(addrReg);
 		addr += offset;
 		
-		long data  = cpu.bus.read(addr, Size.BYTE) << 24;
-			 data |= cpu.bus.read(addr + 2, Size.BYTE) << 16;
-			 data |= cpu.bus.read(addr + 4, Size.BYTE) << 8;
-			 data |= cpu.bus.read(addr + 6, Size.BYTE);
+		long data  = cpu.bus.read(addr, OperationSize.BYTE) << 24;
+			 data |= cpu.bus.read(addr + 2, OperationSize.BYTE) << 16;
+			 data |= cpu.bus.read(addr + 4, OperationSize.BYTE) << 8;
+			 data |= cpu.bus.read(addr + 6, OperationSize.BYTE);
 
 		 cpu.setDLong(dataReg, data);
 	}
@@ -155,7 +155,7 @@ public class MOVEP implements GenInstructionHandler {
 		int addrReg = opcode & 0x7;
 		int dataReg = (opcode >> 9) & 0x7;
 		
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		if ((offset & 0x8000) > 0) {
 			offset = offset | 0xFFFF_0000L;
 		}
@@ -166,15 +166,15 @@ public class MOVEP implements GenInstructionHandler {
 		long addr = cpu.getALong(addrReg);
 		addr += offset;
 		
-		cpu.bus.write(addr, data >> 8, Size.BYTE);
-		cpu.bus.write(addr + 2, data & 0xFF, Size.BYTE);
+		cpu.bus.write(addr, data >> 8, OperationSize.BYTE);
+		cpu.bus.write(addr + 2, data & 0xFF, OperationSize.BYTE);
 	}
 	
 	private void MOVEPRegToMemLong(int opcode) {
 		int addrReg = opcode & 0x7;
 		int dataReg = (opcode >> 9) & 0x7;
 		
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		if ((offset & 0x8000) > 0) {
 			offset = offset | 0xFFFF_0000L;
 		}
@@ -185,10 +185,10 @@ public class MOVEP implements GenInstructionHandler {
 		long addr = cpu.getALong(addrReg);
 		addr += offset;
 		
-		cpu.bus.write(addr, (data >> 24), Size.BYTE);
-		cpu.bus.write(addr + 2, (data >> 16) & 0xFF, Size.BYTE);
-		cpu.bus.write(addr + 4, (data >> 8) & 0xFF, Size.BYTE);
-		cpu.bus.write(addr + 6, data & 0xFF, Size.BYTE);
+		cpu.bus.write(addr, (data >> 24), OperationSize.BYTE);
+		cpu.bus.write(addr + 2, (data >> 16) & 0xFF, OperationSize.BYTE);
+		cpu.bus.write(addr + 4, (data >> 8) & 0xFF, OperationSize.BYTE);
+		cpu.bus.write(addr + 6, data & 0xFF, OperationSize.BYTE);
 	}
 	
 }

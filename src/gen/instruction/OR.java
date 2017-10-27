@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class OR implements GenInstructionHandler {
 
@@ -205,7 +205,7 @@ public class OR implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int destRegister = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long toOr = cpu.getDByte(destRegister);
@@ -213,7 +213,7 @@ public class OR implements GenInstructionHandler {
 		long res = toOr | data;
 		cpu.setDByte(destRegister, res);
 		
-		calcFlags(res, Size.BYTE.getMsb());
+		calcFlags(res, OperationSize.BYTE.getMsb());
 	}
 
 	private void ORSourceEAWord(int opcode) {
@@ -221,7 +221,7 @@ public class OR implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int destRegister = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long toOr = cpu.getDWord(destRegister);
@@ -229,7 +229,7 @@ public class OR implements GenInstructionHandler {
 		long res = toOr | data;
 		cpu.setDWord(destRegister, res);
 		
-		calcFlags(res, Size.WORD.getMsb());
+		calcFlags(res, OperationSize.WORD.getMsb());
 	}
 	
 	private void ORSourceEALong(int opcode) {
@@ -239,13 +239,13 @@ public class OR implements GenInstructionHandler {
 		
 		long data = cpu.getDLong(destRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long toOr = o.getAddressingMode().getLong(o);
 		
 		long res = data | toOr;
 		cpu.setDLong(destRegister, res);
 		
-		calcFlags(res, Size.LONG.getMsb());
+		calcFlags(res, OperationSize.LONG.getMsb());
 	}
 	
 	private void ORDestEAByte(int opcode) {
@@ -255,14 +255,14 @@ public class OR implements GenInstructionHandler {
 		
 		long toOr = cpu.getDByte(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long res = toOr | data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.BYTE);
 		
-		calcFlags(res, Size.BYTE.getMsb());
+		calcFlags(res, OperationSize.BYTE.getMsb());
 	}
 	
 	private void ORDestEAWord(int opcode) {
@@ -272,14 +272,14 @@ public class OR implements GenInstructionHandler {
 		
 		long toOr = cpu.getDWord(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long res = toOr | data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 		
-		calcFlags(res, Size.WORD.getMsb());
+		calcFlags(res, OperationSize.WORD.getMsb());
 	}
 	
 	private void ORDestEALong(int opcode) {
@@ -289,14 +289,14 @@ public class OR implements GenInstructionHandler {
 		
 		long toOr = cpu.getDLong(sourceRegister);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long res = toOr | data;
 		
-		cpu.writeKnownAddressingMode(o, res, Size.LONG);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.LONG);
 		
-		calcFlags(res, Size.LONG.getMsb());
+		calcFlags(res, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

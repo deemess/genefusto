@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVEQ implements GenInstructionHandler {
 
@@ -71,7 +71,7 @@ public class MOVEQ implements GenInstructionHandler {
 
 		cpu.setDLong(register, data);
 		
-		calcFlags(data, Size.LONG.getMsb());
+		calcFlags(data, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

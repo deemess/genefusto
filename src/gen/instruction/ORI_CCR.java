@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ORI_CCR implements GenInstructionHandler {
 
@@ -56,7 +56,7 @@ public class ORI_CCR implements GenInstructionHandler {
 	}
 	
 	private void ORICCR(int opcode) {
-		long toOr = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long toOr = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		toOr &= 0xFF;	//	8 bits
 		 	 
 	 	cpu.PC += 2;

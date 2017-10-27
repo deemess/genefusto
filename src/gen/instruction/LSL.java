@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class LSL implements GenInstructionHandler {
 
@@ -214,7 +214,7 @@ public class LSL implements GenInstructionHandler {
 		
 		boolean carry = cpu.bitTest(res, 8);
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, carry);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, carry);
 	}
 	
 	private void LSLRegisterWord(int opcode) {
@@ -239,7 +239,7 @@ public class LSL implements GenInstructionHandler {
 		
 		boolean carry = cpu.bitTest(res, 16);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 	
 	private void LSLRegisterLong(int opcode) {
@@ -265,7 +265,7 @@ public class LSL implements GenInstructionHandler {
 		
 		boolean carry = ((res >> 32) & 1) == 1;
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, carry);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, carry);
 	}
 	
 	private void LSLMemoryWord(int opcode) {

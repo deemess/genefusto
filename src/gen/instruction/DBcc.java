@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class DBcc implements GenInstructionHandler {
 
@@ -79,7 +79,7 @@ public class DBcc implements GenInstructionHandler {
 		int condition = (opcode >> 8) & 0xF;
 		int register = opcode & 0x7;
 	
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 	
 //		cpu.PC += 2;
 		
@@ -97,7 +97,7 @@ public class DBcc implements GenInstructionHandler {
 			counter = (counter - 1) & 0xFFFF;
 			cpu.setDWord(register, counter);
 		} else {
-			boolean condTrue = cpu.evaluateBranchCondition(condition, Size.WORD);
+			boolean condTrue = cpu.evaluateBranchCondition(condition, OperationSize.WORD);
 			if (condTrue) {
 				cpu.PC += 2;
 			} else {

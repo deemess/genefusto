@@ -1,7 +1,7 @@
 package gen.addressing;
 
 import gen.M68000;
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public class AbsoluteLong implements AddressingMode {
@@ -17,7 +17,7 @@ public class AbsoluteLong implements AddressingMode {
 		long address = o.getAddress();
 		long data = o.getData();
 		
-		cpu.bus.write(address, data, Size.BYTE);
+		cpu.bus.write(address, data, OperationSize.BYTE);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class AbsoluteLong implements AddressingMode {
 		long address = o.getAddress();
 		long data = o.getData();
 		
-		cpu.bus.write(address, data, Size.WORD);
+		cpu.bus.write(address, data, OperationSize.WORD);
 	}
 
 	@Override
@@ -33,13 +33,13 @@ public class AbsoluteLong implements AddressingMode {
 		long address = o.getAddress();
 		long data = o.getData();
 		
-		cpu.bus.write(address, data, Size.LONG);
+		cpu.bus.write(address, data, OperationSize.LONG);
 	}
 	
 	@Override
 	public long getByte(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.BYTE) & 0xFF;
+		long data = cpu.bus.read(addr, OperationSize.BYTE) & 0xFF;
 		
 		return data;
 	}
@@ -47,7 +47,7 @@ public class AbsoluteLong implements AddressingMode {
 	@Override
 	public long getWord(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.WORD);
+		long data = cpu.bus.read(addr, OperationSize.WORD);
 		
 		return data;
 	}
@@ -55,14 +55,14 @@ public class AbsoluteLong implements AddressingMode {
 	@Override
 	public long getLong(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.LONG);
+		long data = cpu.bus.read(addr, OperationSize.LONG);
 		
 		return data;
 	}
 
 	@Override
-	public void calculateAddress(Operation o, Size size) {
-		long addr = cpu.bus.read(cpu.PC + 2, Size.LONG);
+	public void calculateAddress(Operation o, OperationSize size) {
+		long addr = cpu.bus.read(cpu.PC + 2, OperationSize.LONG);
 		o.setAddress(addr);
 		
 		cpu.PC += 4;

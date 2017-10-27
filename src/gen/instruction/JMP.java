@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class JMP implements GenInstructionHandler {
 
@@ -93,7 +93,7 @@ public class JMP implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = opcode & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.LONG, mode, register);
 		long newPC = o.getAddress();
 		
 		cpu.PC = newPC - 2;

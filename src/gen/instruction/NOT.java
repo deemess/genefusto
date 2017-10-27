@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class NOT implements GenInstructionHandler {
 
@@ -124,39 +124,39 @@ public class NOT implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		data = (~data) & 0xFF;
 
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 				
-		calcFlags(data, Size.BYTE.getMsb());
+		calcFlags(data, OperationSize.BYTE.getMsb());
 	}
 	
 	private void NOTWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		data = (~data) & 0xFFFF;
 
-		cpu.writeKnownAddressingMode(o, data, Size.WORD);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.WORD);
 				
-		calcFlags(data, Size.WORD.getMsb());
+		calcFlags(data, OperationSize.WORD.getMsb());
 	}
 
 	private void NOTLong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		data = (~data) & 0xFFFF_FFFFL;
 
-		cpu.writeKnownAddressingMode(o, data, Size.LONG);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.LONG);
 				
-		calcFlags(data, Size.LONG.getMsb());
+		calcFlags(data, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

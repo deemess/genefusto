@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ROXL implements GenInstructionHandler {
 
@@ -206,7 +206,7 @@ public class ROXL implements GenInstructionHandler {
 		
 		cpu.setDByte(register, data);
 		
-		calcFlags(data, Size.BYTE.getMsb(), 0xFF, extended);
+		calcFlags(data, OperationSize.BYTE.getMsb(), 0xFF, extended);
 	}
 	
 	private void ROXLRegisterWord(int opcode) {
@@ -243,7 +243,7 @@ public class ROXL implements GenInstructionHandler {
 		
 		cpu.setDWord(register, data);
 		
-		calcFlags(data, Size.WORD.getMsb(), 0xFFFF, extended);
+		calcFlags(data, OperationSize.WORD.getMsb(), 0xFFFF, extended);
 	}
 	
 	private void ROXLRegisterLong(int opcode) {
@@ -279,14 +279,14 @@ public class ROXL implements GenInstructionHandler {
 		
 		cpu.setDLong(register, data);
 		
-		calcFlags(data, Size.LONG.getMsb(), 0xFFFF_FFFFL, extended);
+		calcFlags(data, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, extended);
 	}
 	
 	private void ROXLMemoryWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getData() & 0xFFFF;
 		
 		int last_out = (int) (data & 0x8000);
@@ -299,7 +299,7 @@ public class ROXL implements GenInstructionHandler {
 		
 		cpu.setDWord(register, data);
 		
-		calcFlags(data, Size.WORD.getMsb(), 0xFFFF, last_out != 0);
+		calcFlags(data, OperationSize.WORD.getMsb(), 0xFFFF, last_out != 0);
 	}
 	
 	void calcFlags(long data, long msb, long maxSize, boolean ext) {

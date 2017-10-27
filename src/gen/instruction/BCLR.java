@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class BCLR implements GenInstructionHandler {
 
@@ -172,7 +172,7 @@ public class BCLR implements GenInstructionHandler {
 		int destMode = (opcode >> 3) & 0x7;
 		int destReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, destMode, destReg);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long bitNumber = cpu.getDLong(dataRegister);
@@ -183,7 +183,7 @@ public class BCLR implements GenInstructionHandler {
 		data = cpu.bitReset((int) data, (int) bitNumber);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 	}
 	
 	private void BCLRRegisterLong(int opcode) {
@@ -191,7 +191,7 @@ public class BCLR implements GenInstructionHandler {
 		int destMode = (opcode >> 3) & 0x7;
 		int destReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, destMode, destReg);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long bitNumber = cpu.getDLong(dataRegister);
@@ -202,19 +202,19 @@ public class BCLR implements GenInstructionHandler {
 		data = cpu.bitReset((int) data, (int) bitNumber);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.LONG);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.LONG);
 	}
 	
 	private void BCLRImmediateByte(int opcode) {
 		int destReg = (opcode & 0x7);
 		int destMode = (opcode >> 3) & 0x7;
 		
-		long numberBit = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long numberBit = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		numberBit &= 7;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.BYTE, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.BYTE, destMode, destReg);
 		long data = o.getAddressingMode().getByte(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -222,19 +222,19 @@ public class BCLR implements GenInstructionHandler {
 		data = cpu.bitReset((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 	}
 	
 	private void BCLRImmediateLong(int opcode) {
 		int destReg = (opcode & 0x7);
 		int destMode = (opcode >> 3) & 0x7;
 		
-		long numberBit = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long numberBit = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		numberBit &= 31;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.LONG, destMode, destReg);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.LONG, destMode, destReg);
 		long data = o.getAddressingMode().getLong(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -242,7 +242,7 @@ public class BCLR implements GenInstructionHandler {
 		data = cpu.bitReset((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.LONG);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.LONG);
 	}
 
 	void calcFlags(long data, int bit) {

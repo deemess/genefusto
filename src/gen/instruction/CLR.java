@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class CLR implements GenInstructionHandler {
 
@@ -128,9 +128,9 @@ public class CLR implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		
 		//	lectura dummy
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
-		cpu.writeKnownAddressingMode(o, 0, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, 0, OperationSize.BYTE);
 		
 		calcFlags();
 	}
@@ -140,9 +140,9 @@ public class CLR implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		
 		//	lectura dummy
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
-		cpu.writeKnownAddressingMode(o, 0, Size.WORD);
+		cpu.writeKnownAddressingMode(o, 0, OperationSize.WORD);
 		
 		calcFlags();
 	}
@@ -152,9 +152,9 @@ public class CLR implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		
 		//	lectura dummy
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
-		cpu.writeKnownAddressingMode(o, 0, Size.LONG);
+		cpu.writeKnownAddressingMode(o, 0, OperationSize.LONG);
 		
 		calcFlags();
 	}

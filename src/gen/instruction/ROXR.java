@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ROXR implements GenInstructionHandler {
 
@@ -209,7 +209,7 @@ public class ROXR implements GenInstructionHandler {
 			}
 		}
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, carry);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, carry);
 	}
 	
 	private void ROXRRegisterWord(int opcode) {
@@ -241,7 +241,7 @@ public class ROXR implements GenInstructionHandler {
 			}
 		}
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 	
 	private void ROXRRegisterLong(int opcode) {
@@ -273,14 +273,14 @@ public class ROXR implements GenInstructionHandler {
 			}
 		}
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, carry);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, carry);
 	}
 	
 	private void ROXRMemoryWord(int opcode) {
 		int register = (opcode & 0x7);
 		int mode = (opcode >> 3) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getData();
 		
 		int extended = cpu.isX() ? 0x8000 : 0;
@@ -291,9 +291,9 @@ public class ROXR implements GenInstructionHandler {
 			carry = true;
 		}
 		
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 
 	void calcFlags(long data, long msb, long maxSize, boolean carry) {

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ADDI implements GenInstructionHandler {
 
@@ -134,52 +134,52 @@ public class ADDI implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 	
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		data = data & 0xFF;
 			 
 		cpu.PC += 2;
 			 
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long toAdd = o.getAddressingMode().getByte(o);
 		
 		long tot = toAdd + data;
-		cpu.writeKnownAddressingMode(o, tot, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, tot, OperationSize.BYTE);
 		
-		calcFlags(tot, data, toAdd, Size.BYTE.getMsb(), Size.BYTE.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.BYTE.getMsb(), OperationSize.BYTE.getMax());
 	}
 
 	private void ADDIWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 	 	cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long toAdd = o.getAddressingMode().getWord(o);
 		
 		long tot = toAdd + data;
-		cpu.writeKnownAddressingMode(o, tot, Size.WORD);
+		cpu.writeKnownAddressingMode(o, tot, OperationSize.WORD);
 		
-		calcFlags(tot, data, toAdd, Size.WORD.getMsb(), Size.WORD.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.WORD.getMsb(), OperationSize.WORD.getMax());
 	}
 	
 	private void ADDILong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 
-		long data = cpu.bus.read(cpu.PC + 2, Size.LONG);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.LONG);
 		
 	 	cpu.PC += 4;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long toAdd = o.getAddressingMode().getLong(o);
 		
 		long tot = toAdd + data;
-		cpu.writeKnownAddressingMode(o, tot, Size.LONG);
+		cpu.writeKnownAddressingMode(o, tot, OperationSize.LONG);
 		
-		calcFlags(tot, data, toAdd, Size.LONG.getMsb(), Size.LONG.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.LONG.getMsb(), OperationSize.LONG.getMax());
 	}
 	
 	void calcFlags(long tot, long data, long toAdd, long msb, long maxSize) {

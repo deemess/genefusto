@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVEA implements GenInstructionHandler {
 
@@ -114,7 +114,7 @@ public class MOVEA implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		int addrReg = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		if ((data & 0x8000) > 0) {
@@ -128,7 +128,7 @@ public class MOVEA implements GenInstructionHandler {
 		int register = opcode & 0x7;
 		int addrReg = (opcode >> 9) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		cpu.setALong(addrReg, data);

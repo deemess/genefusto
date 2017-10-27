@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVE_FROM_SR implements GenInstructionHandler {
 
@@ -91,7 +91,7 @@ public class MOVE_FROM_SR implements GenInstructionHandler {
 
 		long data = cpu.SR;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);	//TODO es escritura, el mode immediate se tranforma por otro, hacer nuevo metodo !!
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);	//TODO es escritura, el mode immediate se tranforma por otro, hacer nuevo metodo !!
 		o.setData(data);
 		o.getAddressingMode().setWord(o);
 	}

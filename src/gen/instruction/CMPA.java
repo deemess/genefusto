@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class CMPA implements GenInstructionHandler {
 
@@ -114,7 +114,7 @@ public class CMPA implements GenInstructionHandler {
 		
 		long data = cpu.getALong(addressRegister);
 
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long toSub = o.getAddressingMode().getWord(o);
 		
 		if ((toSub & 0x8000) == 0x8000) {
@@ -140,7 +140,7 @@ public class CMPA implements GenInstructionHandler {
 		}
 		
 		// long for calculating flags
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL);
 	}
 	
 	private void CMPALong(int opcode) {
@@ -150,7 +150,7 @@ public class CMPA implements GenInstructionHandler {
 		
 		long data = cpu.getALong(addressRegister);
 
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long toSub = o.getAddressingMode().getLong(o);
 
 		long res = data - toSub;
@@ -172,7 +172,7 @@ public class CMPA implements GenInstructionHandler {
 		}
 
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL);
 	}
 	
 	void calcFlags(long data, long msb, long maxSize) {	// TODO merge con los flags de arriba

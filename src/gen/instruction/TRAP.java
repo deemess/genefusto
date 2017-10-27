@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class TRAP implements GenInstructionHandler {
 
@@ -63,18 +63,18 @@ int trap = opcode & 0x7;
 		}
 		
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, oldPC & 0xFF, Size.BYTE);
+		cpu.bus.write(cpu.SSP, oldPC & 0xFF, OperationSize.BYTE);
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, (oldPC >> 8) & 0xFF, Size.BYTE);
+		cpu.bus.write(cpu.SSP, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, (oldPC >> 16) & 0xFF, Size.BYTE);
+		cpu.bus.write(cpu.SSP, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, (oldPC >> 24), Size.BYTE);
+		cpu.bus.write(cpu.SSP, (oldPC >> 24), OperationSize.BYTE);
 		
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, (oldSR & 0xFF), Size.BYTE);
+		cpu.bus.write(cpu.SSP, (oldSR & 0xFF), OperationSize.BYTE);
 		cpu.SSP--;
-		cpu.bus.write(cpu.SSP, (oldSR >> 8), Size.BYTE);
+		cpu.bus.write(cpu.SSP, (oldSR >> 8), OperationSize.BYTE);
 		
 		cpu.setALong(7, cpu.SSP);
 		

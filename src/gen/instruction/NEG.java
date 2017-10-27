@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class NEG implements GenInstructionHandler {
 
@@ -124,7 +124,7 @@ public class NEG implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long res = 0 - data;
@@ -134,16 +134,16 @@ public class NEG implements GenInstructionHandler {
 			overflow = true;
 		}
 		
-		cpu.writeKnownAddressingMode(o, res, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.BYTE);
 				
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, overflow);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, overflow);
 	}
 	
 	private void NEGWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long res = 0 - data;
@@ -153,16 +153,16 @@ public class NEG implements GenInstructionHandler {
 			overflow = true;
 		}
 		
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 				
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, overflow);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, overflow);
 	}
 
 	private void NEGLong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long res = 0 - data;
@@ -172,9 +172,9 @@ public class NEG implements GenInstructionHandler {
 			overflow = true;
 		}
 		
-		cpu.writeKnownAddressingMode(o, res, Size.LONG);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.LONG);
 				
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, overflow);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, overflow);
 	}
 	
 	void calcFlags(long data, long msb, long max, boolean overflow) {

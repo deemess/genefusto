@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVE_TO_SR implements GenInstructionHandler {
 
@@ -100,7 +100,7 @@ public class MOVE_TO_SR implements GenInstructionHandler {
 
 		int oldSR = cpu.SR;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		cpu.SR = (int) data;
 		

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ORI implements GenInstructionHandler {
 
@@ -117,52 +117,52 @@ public class ORI implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		long toOr = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long toOr = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		toOr = toOr & 0xFF;	//	ocupa 2 bytes, pero solo se toma el ultimo
 		
 	 	cpu.PC += 2;
 	 	 
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long res = data | toOr;
-		cpu.writeKnownAddressingMode(o, res, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.BYTE);
 		 	 
-		calcFlags(res, Size.BYTE.getMsb());
+		calcFlags(res, OperationSize.BYTE.getMsb());
 	}
 
 	private void ORIWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		long toOr = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long toOr = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 	 	cpu.PC += 2;
 	 	 
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long res = data | toOr;
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 		 	 
-		calcFlags(res, Size.WORD.getMsb());
+		calcFlags(res, OperationSize.WORD.getMsb());
 	}
 	
 	private void ORILong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 
-		long toOr = cpu.bus.read(cpu.PC + 2, Size.LONG);
+		long toOr = cpu.bus.read(cpu.PC + 2, OperationSize.LONG);
 		
 		cpu.PC += 4;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long res = data | toOr;
-		cpu.writeKnownAddressingMode(o, res, Size.LONG);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.LONG);
 		 	 
-		calcFlags(res, Size.LONG.getMsb());
+		calcFlags(res, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

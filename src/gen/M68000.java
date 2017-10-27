@@ -75,7 +75,7 @@ public class M68000 {
 	AddressingMode addressingModes[];
 	
 	public int runInstruction() {
-		long opcode = bus.read(PC, Size.WORD);
+		long opcode = bus.read(PC, OperationSize.WORD);
 		
 		cycles = 0;
 
@@ -267,12 +267,12 @@ public class M68000 {
     
 	public void initialize() {
 		//	the processor fetches an initial stack pointer from locations $000000-$000003
-		SSP = bus.read(0, Size.LONG);
+		SSP = bus.read(0, OperationSize.LONG);
 		
 		USP = 0xFFFF_FFFFL;
 
 		//	initial PC specified by locations $000004-$000007
-		PC = bus.read(4, Size.LONG);
+		PC = bus.read(4, OperationSize.LONG);
 		
 		for (int i = 0; i < A.length; i++) {
 			A[i] = 0xFFFF_FFFFL;
@@ -282,11 +282,11 @@ public class M68000 {
 		SR = 0x7FFF;
 	}
 	
-	public Operation resolveAddressingMode(Size size, int mode, int register) {
+	public Operation resolveAddressingMode(OperationSize size, int mode, int register) {
 		return resolveAddressingMode(PC + 2, size, mode, register);
 	}
 	
-	public Operation resolveAddressingMode(long offset, Size size, int mode, int register) {
+	public Operation resolveAddressingMode(long offset, OperationSize size, int mode, int register) {
 		AddressingMode addressing = getAddressingMode(mode, register);
 		Operation oper = new Operation();
 		oper.setRegister(register);
@@ -310,16 +310,16 @@ public class M68000 {
 		return addr;
 	}
 
-	public void writeKnownAddressingMode(Operation o, long data, Size size) {
+	public void writeKnownAddressingMode(Operation o, long data, OperationSize size) {
 		AddressingMode addressing = o.getAddressingMode();
 		
 		o.setData(data);
 		
-		if (Size.BYTE == size) {
+		if (OperationSize.BYTE == size) {
 			addressing.setByte(o);
-		} else if (Size.WORD == size) {
+		} else if (OperationSize.WORD == size) {
 			addressing.setWord(o);
-		} else if (Size.LONG == size) {
+		} else if (OperationSize.LONG == size) {
 			addressing.setLong(o);
 		}
 	}
@@ -561,7 +561,7 @@ public class M68000 {
 //0101 CS Carry Set        C = 1      1101 LT Less Than        N (+) V = 1
 //0110 NE Not Equal        Z = 0      1110 GT Greater Than     Z + (N (+) V) = 0
 //0111 EQ EQual            Z = 1      1111 LE Less or Equal    Z + (N (+) V) = 1
-	public boolean evaluateBranchCondition(int cc, Size size) {
+	public boolean evaluateBranchCondition(int cc, OperationSize size) {
 		boolean taken;
 		
 		switch (cc) {
@@ -571,9 +571,9 @@ public class M68000 {
 		case 0b0001:
 			// es un BSR
 			long oldPC;
-			if (size == Size.BYTE) {
+			if (size == OperationSize.BYTE) {
 				oldPC = PC + 2;
-			} else if (size == Size.WORD) {
+			} else if (size == OperationSize.WORD) {
 				oldPC = PC + 4;
 			} else {
 				throw new RuntimeException("");
@@ -583,24 +583,24 @@ public class M68000 {
 			
 			if ((SR & 0x2000) == 0x2000) {
 				SSP--;
-				bus.write(SSP, oldPC & 0xFF, Size.BYTE);
+				bus.write(SSP, oldPC & 0xFF, OperationSize.BYTE);
 				SSP--;
-				bus.write(SSP, (oldPC >> 8) & 0xFF, Size.BYTE);
+				bus.write(SSP, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 				SSP--;
-				bus.write(SSP, (oldPC >> 16) & 0xFF, Size.BYTE);
+				bus.write(SSP, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 				SSP--;
-				bus.write(SSP, (oldPC >> 24), Size.BYTE);
+				bus.write(SSP, (oldPC >> 24), OperationSize.BYTE);
 				
 				setALong(7, SSP);
 			} else {
 				USP--;
-				bus.write(USP, oldPC & 0xFF, Size.BYTE);
+				bus.write(USP, oldPC & 0xFF, OperationSize.BYTE);
 				USP--;
-				bus.write(USP, (oldPC >> 8) & 0xFF, Size.BYTE);
+				bus.write(USP, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 				USP--;
-				bus.write(USP, (oldPC >> 16) & 0xFF, Size.BYTE);
+				bus.write(USP, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 				USP--;
-				bus.write(USP, (oldPC >> 24), Size.BYTE);
+				bus.write(USP, (oldPC >> 24), OperationSize.BYTE);
 				
 				setALong(7, USP);
 			}

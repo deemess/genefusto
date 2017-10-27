@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class LINK implements GenInstructionHandler {
 
@@ -98,7 +98,7 @@ public class LINK implements GenInstructionHandler {
 	private void LINKWord(int opcode) {
 		int register = opcode & 0x7;
 		
-		long offset = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long offset = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 		cpu.PC += 2;
 			 
@@ -106,13 +106,13 @@ public class LINK implements GenInstructionHandler {
 
 		if ((cpu.SR & 0x2000) == 0x2000) {
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, data & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, data & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (data >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (data >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (data >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (data >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (data >> 24), Size.BYTE);
+			cpu.bus.write(cpu.SSP, (data >> 24), OperationSize.BYTE);
 			
 			long oldSSP = cpu.SSP & 0xFFFF_FFFFL;
 			
@@ -130,13 +130,13 @@ public class LINK implements GenInstructionHandler {
 			cpu.setALong(7, newSSP);
 		} else {
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, data & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, data & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (data >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (data >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (data >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (data >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (data >> 24), Size.BYTE);
+			cpu.bus.write(cpu.USP, (data >> 24), OperationSize.BYTE);
 			
 			long oldUSP = cpu.USP & 0xFFFF_FFFFL;
 			

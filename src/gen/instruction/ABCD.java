@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ABCD implements GenInstructionHandler {
 
@@ -128,14 +128,14 @@ public class ABCD implements GenInstructionHandler {
 		cpu.setALong(ry, source);
 		cpu.setALong(rx, dest);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, 0b010, ry);	//	address indirect
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, 0b010, ry);	//	address indirect
 		long data = o.getAddressingMode().getByte(o);
 		
-		Operation o2 = cpu.resolveAddressingMode(Size.BYTE, 0b010, rx);	//	address indirect
+		Operation o2 = cpu.resolveAddressingMode(OperationSize.BYTE, 0b010, rx);	//	address indirect
 		long toAdd = o2.getAddressingMode().getByte(o2);
 		
 		long tot = doCalc(data, toAdd);
-		cpu.writeKnownAddressingMode(o2, tot, Size.BYTE);
+		cpu.writeKnownAddressingMode(o2, tot, OperationSize.BYTE);
 	}
 	
 	protected final long doCalc(long data, long toAdd) {

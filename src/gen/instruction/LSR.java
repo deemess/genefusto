@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class LSR implements GenInstructionHandler {
 
@@ -220,7 +220,7 @@ public class LSR implements GenInstructionHandler {
 		}
 		cpu.setDByte(register, res);
 		
-		calcFlags(res, Size.BYTE.getMsb(), 0xFF, carry);
+		calcFlags(res, OperationSize.BYTE.getMsb(), 0xFF, carry);
 	}
 	
 	private void LSRRegisterWord(int opcode) {
@@ -251,7 +251,7 @@ public class LSR implements GenInstructionHandler {
 						
 		cpu.setDWord(register, res);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 
 	private void LSRRegisterLong(int opcode) {
@@ -282,7 +282,7 @@ public class LSR implements GenInstructionHandler {
 		
 		cpu.setDLong(register, res);
 		
-		calcFlags(res, Size.LONG.getMsb(), 0xFFFF_FFFFL, carry);
+		calcFlags(res, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL, carry);
 	}
 	
 	private void LSRMemoryWord(int opcode) {
@@ -291,7 +291,7 @@ public class LSR implements GenInstructionHandler {
 		
 		long toShift = 1;
 
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
 		long res = data >> toShift;
@@ -303,9 +303,9 @@ public class LSR implements GenInstructionHandler {
 			}
 		}
 			
-		cpu.writeKnownAddressingMode(o, res, Size.WORD);
+		cpu.writeKnownAddressingMode(o, res, OperationSize.WORD);
 		
-		calcFlags(res, Size.WORD.getMsb(), 0xFFFF, carry);
+		calcFlags(res, OperationSize.WORD.getMsb(), 0xFFFF, carry);
 	}
 
 	void calcFlags(long data, long msb, long maxSize, boolean carry) {

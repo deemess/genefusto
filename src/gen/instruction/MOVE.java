@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class MOVE implements GenInstructionHandler {
 
@@ -159,15 +159,15 @@ public class MOVE implements GenInstructionHandler {
 		int sourceMode = (opcode >> 3) & 0x7;
 		int sourceReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, sourceMode, sourceReg);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, sourceMode, sourceReg);
 		long data = o.getAddressingMode().getByte(o);
 		
-		Operation oDest = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation oDest = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		oDest.setData(data);
 		
 		oDest.getAddressingMode().setByte(oDest);
 		
-		calcFlags(data, Size.BYTE.getMsb());
+		calcFlags(data, OperationSize.BYTE.getMsb());
 	}
 	
 	private void MOVEWord(int opcode) {
@@ -176,15 +176,15 @@ public class MOVE implements GenInstructionHandler {
 		int sourceMode = (opcode >> 3) & 0x7;
 		int sourceReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.WORD, sourceMode, sourceReg);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.WORD, sourceMode, sourceReg);
 		long data = o.getAddressingMode().getWord(o);
 		
-		Operation oDest = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation oDest = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		oDest.setData(data);
 		
 		oDest.getAddressingMode().setWord(oDest);
 		
-		calcFlags(data, Size.WORD.getMsb());
+		calcFlags(data, OperationSize.WORD.getMsb());
 	}
 	
 	private void MOVELong(int opcode) {
@@ -193,15 +193,15 @@ public class MOVE implements GenInstructionHandler {
 		int sourceMode = (opcode >> 3) & 0x7;
 		int sourceReg = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.LONG, sourceMode, sourceReg);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.LONG, sourceMode, sourceReg);
 		long data = o.getAddressingMode().getLong(o);
 		
-		Operation oDest = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation oDest = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		oDest.setData(data);
 		
 		oDest.getAddressingMode().setLong(oDest);
 		
-		calcFlags(data, Size.LONG.getMsb());
+		calcFlags(data, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

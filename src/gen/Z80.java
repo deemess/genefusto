@@ -5721,7 +5721,7 @@ public class Z80 {
 		} else if (address >= 0x8000 && address <= 0xFFFF) {
 			System.out.println("ESCRITURA 68k!!!!!!");
 			address = address - 0x8000 + (romBank68kSerial << 15);
-			bus.write(address, data, Size.BYTE);
+			bus.write(address, data, OperationSize.BYTE);
 		} else {
 			System.out.println("NOT - PC: " + Integer.toHexString(PC) + " - " + Integer.toHexString(address));
 //			throw new RuntimeException("NOT - PC: " + Integer.toHexString(PC) + " - " + Integer.toHexString(address));
@@ -5789,7 +5789,7 @@ public class Z80 {
 //			System.out.println("LECTURA 68k ! " + Integer.toHexString(PC - 1));
 			address = address - 0x8000 + (romBank68kSerial << 15);
 //			address = address & 0x3F_FFFF;
-			return (int) bus.read(address, Size.BYTE);
+			return (int) bus.read(address, OperationSize.BYTE);
 		} else {
 //			throw new RuntimeException("MEMORY READ, PC: " + Integer.toHexString(PC) + ": " + Integer.toHexString(address));
 //			System.out.println("MEMORY READ, PC: " + Integer.toHexString(PC) + ": " + Integer.toHexString(address));

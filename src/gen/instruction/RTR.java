@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class RTR implements GenInstructionHandler {
 
@@ -53,26 +53,26 @@ public class RTR implements GenInstructionHandler {
 		long newSR;
 		
 		if ((cpu.SR & 0x2000) == 0x2000) {
-			newSR = cpu.bus.read(cpu.SSP, Size.WORD);
+			newSR = cpu.bus.read(cpu.SSP, OperationSize.WORD);
 			cpu.SSP += 2;
 			
 			int flags = (int) (newSR & 0x1F);	// solo se usa el byte inferior con los 5 flags
 			cpu.SR = (int) ((cpu.SR & 0xFFE0) | flags);
 			
-			newPC = cpu.bus.read(cpu.SSP, Size.LONG);
+			newPC = cpu.bus.read(cpu.SSP, OperationSize.LONG);
 			cpu.SSP += 4;
 			
 			cpu.setALong(7, cpu.SSP);
 			
 			cpu.PC = newPC - 2;
 		} else {
-			newSR = cpu.bus.read(cpu.USP, Size.WORD);
+			newSR = cpu.bus.read(cpu.USP, OperationSize.WORD);
 			cpu.USP += 2;
 			
 			int flags = (int) (newSR & 0x1F);	// solo se usa el byte inferior con los 5 flags
 			cpu.SR = (int) ((cpu.SR & 0xFFE0) | flags);
 			
-			newPC = cpu.bus.read(cpu.USP, Size.LONG);
+			newPC = cpu.bus.read(cpu.USP, OperationSize.LONG);
 			cpu.USP += 4;
 			
 			cpu.setALong(7, cpu.USP);

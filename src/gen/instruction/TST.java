@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class TST implements GenInstructionHandler {
 
@@ -124,30 +124,30 @@ public class TST implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
-		calcFlags(data, Size.BYTE.getMsb());
+		calcFlags(data, OperationSize.BYTE.getMsb());
 	}
 	
 	private void TSTWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getAddressingMode().getWord(o);
 		
-		calcFlags(data, Size.WORD.getMsb());
+		calcFlags(data, OperationSize.WORD.getMsb());
 	}
 	
 	private void TSTLong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
-		calcFlags(data, Size.LONG.getMsb());
+		calcFlags(data, OperationSize.LONG.getMsb());
 	}
 	
 	void calcFlags(long data, long msb) {

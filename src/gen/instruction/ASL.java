@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ASL implements GenInstructionHandler {
 
@@ -222,7 +222,7 @@ public class ASL implements GenInstructionHandler {
 		
 		cpu.setDByte(register, data);
 		
-		calcFlags(data, shift, msb_changed, last_out, Size.BYTE.getMsb());
+		calcFlags(data, shift, msb_changed, last_out, OperationSize.BYTE.getMsb());
 	}
 	
 	private void ASLWord(int opcode) {
@@ -259,7 +259,7 @@ public class ASL implements GenInstructionHandler {
 		
 		cpu.setDWord(register, data);
 		
-		calcFlags(data, shift, msb_changed, last_out, Size.WORD.getMsb());
+		calcFlags(data, shift, msb_changed, last_out, OperationSize.WORD.getMsb());
 	}
 	
 	private void ASLLong(int opcode) {
@@ -295,14 +295,14 @@ public class ASL implements GenInstructionHandler {
 		
 		cpu.setDLong(register, data);
 					
-		calcFlags(data, shift, msb_changed, last_out, Size.LONG.getMsb());
+		calcFlags(data, shift, msb_changed, last_out, OperationSize.LONG.getMsb());
 	}
 	
 	private void ASLMemoryWord(int opcode) {
 		int register = (opcode & 0x7);
 		int mode = (opcode >> 3) & 0x7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long data = o.getData() & 0xFFFF;
 		int last_out = (int) (data & 0x8000);
 		int msb_changed = 0;
@@ -314,7 +314,7 @@ public class ASL implements GenInstructionHandler {
 		
 		cpu.setDWord(register, data);
 					
-		calcFlags(data, 1, msb_changed, last_out, Size.WORD.getMsb());
+		calcFlags(data, 1, msb_changed, last_out, OperationSize.WORD.getMsb());
 	}
 	
 	private void calcFlags(long data, long shift, long msb_changed, long last_out, long msb) {

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class EXT implements GenInstructionHandler {
 
@@ -92,7 +92,7 @@ public class EXT implements GenInstructionHandler {
 
 		cpu.setDWord(register, data);
 				
-		calcFlags(data, Size.WORD.getMsb());
+		calcFlags(data, OperationSize.WORD.getMsb());
 	}
 	
 	private void EXT16To32Bits(int opcode) {
@@ -105,7 +105,7 @@ public class EXT implements GenInstructionHandler {
 
 		cpu.setDLong(register, data);
 				
-		calcFlags(data, Size.LONG.getMsb());
+		calcFlags(data, OperationSize.LONG.getMsb());
 	}
 
 	void calcFlags(long data, long msb) {

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class NBCD implements GenInstructionHandler {
 
@@ -70,7 +70,7 @@ public class NBCD implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x07;
 		int register = (opcode & 0x07);
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getData();
 
 		int x = (cpu.isX() ? 1 : 0);
@@ -108,7 +108,7 @@ public class NBCD implements GenInstructionHandler {
 
 		o.setData(result);
 		
-		cpu.writeKnownAddressingMode(o, result, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, result, OperationSize.BYTE);
 	}
 	
 }

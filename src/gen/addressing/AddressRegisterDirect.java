@@ -1,7 +1,7 @@
 package gen.addressing;
 
 import gen.M68000;
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public class AddressRegisterDirect implements AddressingMode {
@@ -62,7 +62,7 @@ public class AddressRegisterDirect implements AddressingMode {
 	}
 
 	@Override
-	public void calculateAddress(Operation o, Size size) {
+	public void calculateAddress(Operation o, OperationSize size) {
 //		throw new RuntimeException("No address");
 	}
 

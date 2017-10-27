@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class JSR implements GenInstructionHandler {
 
@@ -93,31 +93,31 @@ public class JSR implements GenInstructionHandler {
 	private void JumpSR(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = opcode & 0x7;
-		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(cpu.PC + 2, OperationSize.LONG, mode, register);
 		long newPC = o.getAddress();
 		
 		long oldPC = cpu.PC + 2;
 		
 		if ((cpu.SR & 0x2000) == 0x2000) {
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, oldPC & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, oldPC & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (oldPC >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (oldPC >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (oldPC >> 24), Size.BYTE);
+			cpu.bus.write(cpu.SSP, (oldPC >> 24), OperationSize.BYTE);
 			
 			cpu.setALong(7, cpu.SSP);
 		} else {
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, oldPC & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, oldPC & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (oldPC >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (oldPC >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (oldPC >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (oldPC >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (oldPC >> 24), Size.BYTE);
+			cpu.bus.write(cpu.USP, (oldPC >> 24), OperationSize.BYTE);
 			
 			cpu.setALong(7, cpu.USP);
 		}

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ASR implements GenInstructionHandler {
 
@@ -223,7 +223,7 @@ public class ASR implements GenInstructionHandler {
 		}
 		cpu.setDByte(register, data);
 					
-		calcFlags(data, shift, last_out, Size.BYTE.getMsb());
+		calcFlags(data, shift, last_out, OperationSize.BYTE.getMsb());
 	}
 	
 	private void ASRWord(int opcode) {
@@ -256,7 +256,7 @@ public class ASR implements GenInstructionHandler {
 		data &= 0xFFFF;
 		cpu.setDWord(register, data);
 					
-		calcFlags(data, shift, last_out, Size.WORD.getMsb());
+		calcFlags(data, shift, last_out, OperationSize.WORD.getMsb());
 	}
 	
 	private void ASRLong(int opcode) {
@@ -288,14 +288,14 @@ public class ASR implements GenInstructionHandler {
 		}
 		cpu.setDLong(register, data);
 					
-		calcFlags(data, shift, last_out, Size.LONG.getMsb());
+		calcFlags(data, shift, last_out, OperationSize.LONG.getMsb());
 	}
 
 	private void ASRMemoryWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long v = o.getAddressingMode().getWord(o);
 		long last_out = v & 0x01;
 		long msb = v & 0x8000;
@@ -303,9 +303,9 @@ public class ASR implements GenInstructionHandler {
 		v >>>= 1;
 		v |= msb;
 
-		cpu.writeKnownAddressingMode(o, v, Size.WORD);
+		cpu.writeKnownAddressingMode(o, v, OperationSize.WORD);
 
-		calcFlags(v, 1, last_out, Size.WORD.getMsb());
+		calcFlags(v, 1, last_out, OperationSize.WORD.getMsb());
 	}
 	
 	private void calcFlags(long data, long shift, long last_out, long msb) {

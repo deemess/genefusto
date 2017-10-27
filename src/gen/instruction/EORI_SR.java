@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class EORI_SR implements GenInstructionHandler {
 
@@ -56,7 +56,7 @@ public class EORI_SR implements GenInstructionHandler {
 	}
 	
 	private void EORISR(int opcode) {
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 	 	cpu.PC += 2;
 		 	 

@@ -1,7 +1,7 @@
 package gen.addressing;
 
 import gen.M68000;
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public class ImmediateData implements AddressingMode {
@@ -30,7 +30,7 @@ public class ImmediateData implements AddressingMode {
 	@Override
 	public long getByte(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.WORD);	//	lee 2 bytes
+		long data = cpu.bus.read(addr, OperationSize.WORD);	//	lee 2 bytes
 		data = data & 0xFF;
 		
 		return data;
@@ -39,7 +39,7 @@ public class ImmediateData implements AddressingMode {
 	@Override
 	public long getWord(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.WORD);
+		long data = cpu.bus.read(addr, OperationSize.WORD);
 			 
 		return data;
 	}
@@ -47,22 +47,22 @@ public class ImmediateData implements AddressingMode {
 	@Override
 	public long getLong(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.LONG);
+		long data = cpu.bus.read(addr, OperationSize.LONG);
 		
 		return data;
 	}
 
 	@Override
-	public void calculateAddress(Operation o, Size size) {
+	public void calculateAddress(Operation o, OperationSize size) {
 		o.setAddress(cpu.PC + 2);
 		
-		if (size == Size.BYTE) {		//	aunque sea byte, siempre ocupa 2 bytes y cuenta el de la derecha
+		if (size == OperationSize.BYTE) {		//	aunque sea byte, siempre ocupa 2 bytes y cuenta el de la derecha
 			cpu.PC += 2;
 			
-		} else if (size == Size.WORD) {
+		} else if (size == OperationSize.WORD) {
 			cpu.PC += 2;
 			
-		} else if (size == Size.LONG) {	// long
+		} else if (size == OperationSize.LONG) {	// long
 			cpu.PC += 4;
 			
 		}

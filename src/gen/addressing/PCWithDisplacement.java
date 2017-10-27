@@ -1,7 +1,7 @@
 package gen.addressing;
 
 import gen.M68000;
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public class PCWithDisplacement implements AddressingMode {
@@ -30,7 +30,7 @@ public class PCWithDisplacement implements AddressingMode {
 	@Override
 	public long getByte(Operation o) {
 		long address = o.getAddress();
-		long data = cpu.bus.read(address, Size.BYTE);
+		long data = cpu.bus.read(address, OperationSize.BYTE);
 		
 		return data;
 	}
@@ -38,7 +38,7 @@ public class PCWithDisplacement implements AddressingMode {
 	@Override
 	public long getWord(Operation o) {
 		long address = o.getAddress();
-		long data = cpu.bus.read(address, Size.WORD);
+		long data = cpu.bus.read(address, OperationSize.WORD);
 		
 		return data;
 	}
@@ -46,14 +46,14 @@ public class PCWithDisplacement implements AddressingMode {
 	@Override
 	public long getLong(Operation o) {
 		long address = o.getAddress();
-		long data = cpu.bus.read(address, Size.LONG);
+		long data = cpu.bus.read(address, OperationSize.LONG);
 		
 		return data;
 	}
 
 	@Override
-	public void calculateAddress(Operation o, Size size) {
-		long displacement = cpu.bus.read(cpu.PC + 2, Size.WORD);
+	public void calculateAddress(Operation o, OperationSize size) {
+		long displacement = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		long addr;
 		if ((displacement & 0x8000) > 0) {
 			displacement = -displacement;

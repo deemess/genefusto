@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ADDX implements GenInstructionHandler {
 
@@ -160,7 +160,7 @@ public class ADDX implements GenInstructionHandler {
 		long tot = data + toAdd + extended;
 		cpu.setDByte(rx, tot);
 		
-		calcFlags(tot, data, toAdd, Size.BYTE.getMsb(), Size.BYTE.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.BYTE.getMsb(), OperationSize.BYTE.getMax());
 	}
 	
 	private void ADDXDataWord(int opcode) {
@@ -175,7 +175,7 @@ public class ADDX implements GenInstructionHandler {
 		long tot = data + toAdd + extended;
 		cpu.setDWord(rx, tot);
 		
-		calcFlags(tot, data, toAdd, Size.WORD.getMsb(), Size.WORD.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.WORD.getMsb(), OperationSize.WORD.getMax());
 	}
 	
 	private void ADDXDataLong(int opcode) {
@@ -190,7 +190,7 @@ public class ADDX implements GenInstructionHandler {
 		long tot = data + toAdd + extended;
 		cpu.setDLong(rx, tot);
 		
-		calcFlags(tot, data, toAdd, Size.LONG.getMsb(), Size.LONG.getMax());
+		calcFlags(tot, data, toAdd, OperationSize.LONG.getMsb(), OperationSize.LONG.getMax());
 	}
 	
 	private void ADDXAddressByte(int opcode) {

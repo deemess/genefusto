@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class ADDQ implements GenInstructionHandler {
 
@@ -134,15 +134,15 @@ public class ADDQ implements GenInstructionHandler {
 			dataToAdd = 8;
 		}
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		long tot = (data + dataToAdd);
 		long total = tot & 0xFFFF_FFFFL;
 		
-		cpu.writeKnownAddressingMode(o, total, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, total, OperationSize.BYTE);
 		
-		calcFlags(tot, data, dataToAdd, Size.BYTE.getMsb(), 0xFF);
+		calcFlags(tot, data, dataToAdd, OperationSize.BYTE.getMsb(), 0xFF);
 	}
 	
 	private void ADDQWord(int opcode) {
@@ -161,15 +161,15 @@ public class ADDQ implements GenInstructionHandler {
 			cpu.setALong(register, tot);
 			
 		} else {
-			Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+			Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 			long data = o.getAddressingMode().getWord(o);
 			
 			long tot = (data + dataToAdd);
 			long total = tot & 0xFFFF_FFFFL;
 			
-			cpu.writeKnownAddressingMode(o, total, Size.WORD);
+			cpu.writeKnownAddressingMode(o, total, OperationSize.WORD);
 			
-			calcFlags(tot, data, dataToAdd, Size.WORD.getMsb(), 0xFFFF);
+			calcFlags(tot, data, dataToAdd, OperationSize.WORD.getMsb(), 0xFFFF);
 		}
 		
 	}
@@ -183,17 +183,17 @@ public class ADDQ implements GenInstructionHandler {
 			dataToAdd = 8;
 		}
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		long tot = (data + dataToAdd);
 		long total = tot & 0xFFFF_FFFFL;
 
-		cpu.writeKnownAddressingMode(o, total, Size.LONG);
+		cpu.writeKnownAddressingMode(o, total, OperationSize.LONG);
 		
 		// if destination is An no cambian los flags
 		if (mode != 1) {
-			calcFlags(tot, data, dataToAdd, Size.LONG.getMsb(), 0xFFFF_FFFFL);
+			calcFlags(tot, data, dataToAdd, OperationSize.LONG.getMsb(), 0xFFFF_FFFFL);
 		}
 	}
 	

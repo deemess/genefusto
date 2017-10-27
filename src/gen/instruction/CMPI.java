@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class CMPI implements GenInstructionHandler {
 
@@ -122,49 +122,49 @@ public class CMPI implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		data = data & 0xFF;	//	ultimo byte
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long toSub = o.getAddressingMode().getByte(o);
 		
 		long res = toSub - data;
 		
-		calcFlags(data, toSub, res, Size.BYTE.getMsb(), Size.BYTE.getMax());
+		calcFlags(data, toSub, res, OperationSize.BYTE.getMsb(), OperationSize.BYTE.getMax());
 	}
 	
 	private void CMPIWord(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		long toSub = o.getAddressingMode().getWord(o);
 
 		long res = toSub - data;
 		
-		calcFlags(data, toSub, res, Size.WORD.getMsb(), Size.WORD.getMax());
+		calcFlags(data, toSub, res, OperationSize.WORD.getMsb(), OperationSize.WORD.getMax());
 	}
 	
 	private void CMPILong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 
-		long data = cpu.bus.read(cpu.PC + 2, Size.LONG);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.LONG);
 		
 		cpu.PC += 4;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long toSub = o.getAddressingMode().getLong(o);
 		
 		long res = toSub - data;
 		
-		calcFlags(data, toSub, res, Size.LONG.getMsb(), Size.LONG.getMax());
+		calcFlags(data, toSub, res, OperationSize.LONG.getMsb(), OperationSize.LONG.getMax());
 	}
 	
 	void calcFlags(long data, long toSub, long res, long msb, long maxSize) {

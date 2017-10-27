@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class DIVS implements GenInstructionHandler {
 
@@ -116,7 +116,7 @@ public class DIVS implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.WORD, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.WORD, mode, register);
 		int s = (int) o.getAddressingMode().getWord(o);
 		if ((s & 0x8000) > 0) {
 			s |= 0xFFFF_0000L;

@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class BSET implements GenInstructionHandler {
 
@@ -170,12 +170,12 @@ public class BSET implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = opcode & 0x7;
 		
-		long numberBit = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long numberBit = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		numberBit &= 7;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -183,19 +183,19 @@ public class BSET implements GenInstructionHandler {
 		data = cpu.bitSet((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 	}
 	
 	private void BSETImmediateLong(int opcode) {
 		int mode = (opcode >> 3) & 0x7;
 		int register = opcode & 0x7;
 		
-		long numberBit = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long numberBit = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		numberBit &= 31;
 		
 		cpu.PC += 2;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -203,7 +203,7 @@ public class BSET implements GenInstructionHandler {
 		data = cpu.bitSet((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.LONG);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.LONG);
 	}
 	
 	private void BSETRegisterByte(int opcode) {
@@ -214,7 +214,7 @@ public class BSET implements GenInstructionHandler {
 		int numberBit = (int) cpu.getDLong(dataRegister);
 		numberBit &= 7;
 		
-		Operation o = cpu.resolveAddressingMode(Size.BYTE, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.BYTE, mode, register);
 		long data = o.getAddressingMode().getByte(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -222,7 +222,7 @@ public class BSET implements GenInstructionHandler {
 		data = cpu.bitSet((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.BYTE);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.BYTE);
 	}
 	
 	private void BSETRegisterLong(int opcode) {
@@ -233,7 +233,7 @@ public class BSET implements GenInstructionHandler {
 		int numberBit = (int) cpu.getDLong(dataRegister);
 		numberBit &= 31;
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long data = o.getAddressingMode().getLong(o);
 		
 		calcFlags(data, (int) numberBit);
@@ -241,7 +241,7 @@ public class BSET implements GenInstructionHandler {
 		data = cpu.bitSet((int) data, (int) numberBit);
 		o.setData(data);
 		
-		cpu.writeKnownAddressingMode(o, data, Size.LONG);
+		cpu.writeKnownAddressingMode(o, data, OperationSize.LONG);
 	}
 	
 	void calcFlags(long data, int bit) {

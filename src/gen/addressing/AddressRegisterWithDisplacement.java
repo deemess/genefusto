@@ -1,7 +1,7 @@
 package gen.addressing;
 
 import gen.M68000;
-import gen.Size;
+import gen.OperationSize;
 import gen.instruction.Operation;
 
 public class AddressRegisterWithDisplacement implements AddressingMode {
@@ -17,7 +17,7 @@ public class AddressRegisterWithDisplacement implements AddressingMode {
 		long addr = o.getAddress();
 		long data = o.getData();
 
-		cpu.bus.write(addr, data & 0xFF, Size.BYTE);
+		cpu.bus.write(addr, data & 0xFF, OperationSize.BYTE);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class AddressRegisterWithDisplacement implements AddressingMode {
 		long addr = o.getAddress();
 		long data = o.getData();
 
-		cpu.bus.write(addr, data & 0xFFFF, Size.WORD);
+		cpu.bus.write(addr, data & 0xFFFF, OperationSize.WORD);
 	}
 
 	@Override
@@ -33,21 +33,21 @@ public class AddressRegisterWithDisplacement implements AddressingMode {
 		long addr = o.getAddress();
 		long data = o.getData();
 
-		cpu.bus.write(addr, data, Size.LONG);
+		cpu.bus.write(addr, data, OperationSize.LONG);
 	}
 	
 	@Override
 	public long getByte(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.BYTE) & 0xFF;
-		
+		long data = cpu.bus.read(addr, OperationSize.BYTE) & 0xFF;
+
 		return data;
 	}
 
 	@Override
 	public long getWord(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.WORD);
+		long data = cpu.bus.read(addr, OperationSize.WORD);
 		
 		return data;
 	}
@@ -55,15 +55,15 @@ public class AddressRegisterWithDisplacement implements AddressingMode {
 	@Override
 	public long getLong(Operation o) {
 		long addr = o.getAddress();
-		long data = cpu.bus.read(addr, Size.LONG);
+		long data = cpu.bus.read(addr, OperationSize.LONG);
 		
 		return data;
 	}
 
 	@Override
-	public void calculateAddress(Operation o, Size size) {
+	public void calculateAddress(Operation o, OperationSize size) {
 		long base = cpu.getALong(o.getRegister());
-		long displac = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long displac = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 		cpu.PC += 2;
 		

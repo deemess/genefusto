@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class STOP implements GenInstructionHandler {
 
@@ -58,7 +58,7 @@ public class STOP implements GenInstructionHandler {
 	}
 	
 	private void STOPOp(int opcode) {
-		long data = cpu.bus.read(cpu.PC + 2, Size.WORD);
+		long data = cpu.bus.read(cpu.PC + 2, OperationSize.WORD);
 		
 	 	cpu.PC += 2;
 	 	

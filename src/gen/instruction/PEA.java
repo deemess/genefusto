@@ -2,7 +2,7 @@ package gen.instruction;
 
 import gen.M68000;
 import gen.Instruction;
-import gen.Size;
+import gen.OperationSize;
 
 public class PEA implements GenInstructionHandler {
 
@@ -94,30 +94,30 @@ public class PEA implements GenInstructionHandler {
 		int mode = (opcode >> 3) & 0x7;
 		int register = (opcode & 0x7);
 		
-		Operation o = cpu.resolveAddressingMode(Size.LONG, mode, register);
+		Operation o = cpu.resolveAddressingMode(OperationSize.LONG, mode, register);
 		long addr = o.getAddress();
 		
 		if ((cpu.SR & 0x2000) == 0x2000) {
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, addr & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, addr & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (addr >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (addr >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (addr >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.SSP, (addr >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.SSP--;
-			cpu.bus.write(cpu.SSP, (addr >> 24), Size.BYTE);
+			cpu.bus.write(cpu.SSP, (addr >> 24), OperationSize.BYTE);
 			
 			cpu.setALong(7, cpu.SSP);
 		} else {
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, addr & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, addr & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (addr >> 8) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (addr >> 8) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (addr >> 16) & 0xFF, Size.BYTE);
+			cpu.bus.write(cpu.USP, (addr >> 16) & 0xFF, OperationSize.BYTE);
 			cpu.USP--;
-			cpu.bus.write(cpu.USP, (addr >> 24), Size.BYTE);
-			
+			cpu.bus.write(cpu.USP, (addr >> 24), OperationSize.BYTE);
+
 			cpu.setALong(7, cpu.USP);
 		}
 		
