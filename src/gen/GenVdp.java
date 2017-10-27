@@ -227,7 +227,7 @@ public class GenVdp {
 
 	private void writeRamAddress(long data) {
 		if (!addressSecondWrite) {
-			System.out.println("first");
+			//System.out.println("first");
 			
 			firstWrite = data;
 			addressSecondWrite = true;
@@ -242,7 +242,7 @@ public class GenVdp {
 			int code = (int) ((first >> 14) | (((second >> 4) & 0xF) << 2));
 			int addr = (int) ((first & 0x3FFF) | ((second & 0x3) << 14));
 
-			System.out.println("second code " + Integer.toHexString(code));
+			//System.out.println("second code " + Integer.toHexString(code));
 			
 			addressPort = addr;
 			autoIncrementTotal = 0;	// reset este acumulador
@@ -273,7 +273,7 @@ public class GenVdp {
 				vramMode = VramMode.vsramWrite;
 			}
 			
-			System.out.println("Video mode: " + vramMode.toString());
+			//System.out.println("Video mode: " + vramMode.toString());
 			
 			//	https://wiki.megadrive.org/index.php?title=VDP_DMA
 			if ((code & 0b100000) > 0) { // DMA
@@ -310,7 +310,7 @@ public class GenVdp {
 		int dataControl = (int) (data & 0x00FF);
 		int reg = (int) ((data >> 8) & 0x1F);
 		
-		System.out.println("REG: " + pad(reg) + " - data: " + pad(dataControl));
+		//System.out.println("REG: " + pad(reg) + " - data: " + pad(dataControl));
 		
 		cramWrite2 = false;
 		vramWrite2 = false;
@@ -1690,7 +1690,7 @@ public class GenVdp {
 			
 		} else {	// 16 columns (2 tiles) scrolling
 //			throw new RuntimeException();
-			System.out.println("16 vert scroll");
+			//System.out.println("16 vert scroll");
 		}
 		
 		long scrollDataHor = 0;
@@ -2123,8 +2123,8 @@ public class GenVdp {
 		
 		long data = ((data1 << 8) | (data2));
 		
-		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
-				+ Integer.toHexString((int) data));
+//		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
+//				+ Integer.toHexString((int) data));
 		
 //		fifoAddress[index] = offset;
 //		fifoCode[index] = code;
@@ -2166,8 +2166,8 @@ public class GenVdp {
 		
 		long data = ((data1 << 8) | (data2));
 		
-		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
-				+ Integer.toHexString((int) data));
+//		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
+//				+ Integer.toHexString((int) data));
 		
 //		fifoAddress[index] = offset;
 //		fifoCode[index] = code;
@@ -2205,8 +2205,8 @@ public class GenVdp {
 		
 		long data = ((data1 << 8) | (data2));
 		
-		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
-				+ Integer.toHexString((int) data));
+//		System.out.println("addr: " + Integer.toHexString(offset) + "-" + Integer.toHexString(offset + 1) + ": "
+//				+ Integer.toHexString((int) data));
 		
 //		fifoAddress[index] = offset;
 //		fifoCode[index] = code;

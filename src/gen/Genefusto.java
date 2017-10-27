@@ -475,7 +475,7 @@ public class Genefusto {
     }
 
 //    String basePath = "C:\\Users\\Zotac\\workspace\\raul\\src\\gen\\roms\\";
-	String basePath = "C:\\dev\\workspace\\test\\src\\gen\\roms\\";
+	String basePath = "c:\\Users\\Dmitry\\IdeaProjects\\ROMS\\Genesis\\";
     
     class MyRunnable implements Runnable {
         File file;

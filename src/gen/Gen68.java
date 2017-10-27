@@ -19,11 +19,11 @@ public class Gen68 {
 	
 	//	http://tict.ticalc.org/docs/68kguide.txt
 	//	Status Register o condition code register
-	//	X—Extend: Set to the value of the C-bit for arithmetic operations; otherwise not affected or set to a specified result.
-	//	N—Negative: Set if the most significant bit of the result is set; otherwise clear.
-	//	Z—Zero: Set if the result equals zero; otherwise clear.
-	//	V—Overflow: Set if an arithmetic overflow occurs implying that the result cannot be represented in the operand size; otherwise clear. 
-	//	C—Carry: Set if a carry out of the most significant bit of the operand occurs for an addition, or if a borrow occurs in a subtraction; otherwise clear. 
+	//	Xï¿½Extend: Set to the value of the C-bit for arithmetic operations; otherwise not affected or set to a specified result.
+	//	Nï¿½Negative: Set if the most significant bit of the result is set; otherwise clear.
+	//	Zï¿½Zero: Set if the result equals zero; otherwise clear.
+	//	Vï¿½Overflow: Set if an arithmetic overflow occurs implying that the result cannot be represented in the operand size; otherwise clear. 
+	//	Cï¿½Carry: Set if a carry out of the most significant bit of the operand occurs for an addition, or if a borrow occurs in a subtraction; otherwise clear. 
 	
 //	 Bit 15 14 13 12 11 10  9  8  7  6  5  4  3  2  1  0
 //	    -------------------------------------------------
@@ -80,49 +80,15 @@ public class Gen68 {
 	public int runInstruction() {
 		long opcode = bus.read(PC, Size.WORD);
 		
-		sb.append(pad4((int) PC) + " - Opcode: " + pad4((int) opcode) + " - SR: " + pad4(SR) + " - SSP: "
-				+ pad4((int) SSP) + " - USP: " + pad4((int) USP) + "\r\n");
-		for (int j = 0; j < 8; j++) {
-			sb.append(" A" + j + ":" + Integer.toHexString((int) A[j]));
-		}
-		sb.append("\r\n");
-		for (int j = 0; j < 8; j++) {
-			sb.append(" D" + j + ":" + Integer.toHexString((int) D[j]));
-		}
-		sb.append("\r\n");
-		if (print) {
-			System.out.println(sb.toString());
-		}
-		
-		sb.setLength(0);
-		
 		cycles = 0;
-		
-//		print = true;
-		
-		if (bus.vdp.vram[0xb880] == 0xFC){
-			System.out.println();
+
+		GenInstruction instruction = instructions[(int)opcode];
+		if (instruction == null) {
+			System.out.println("Unknown OpCode! PC: " + Integer.toHexString((int) PC) + " - OpCode: " + Integer.toHexString((int)opcode));
+		} else {
+			instruction.run((int) opcode);
 		}
 
-		if (bus.memory.ram[0xc2bb] != 0) {
-//			System.out.println();
-		}
-		
-		if (bus.vdp.cram[0x7b] == 0xa3) {
-			
-		}
-		
-//		if ((SSP & 0xFFFF_FFFFL) != getA(7) && (SR & 0x2000) == 0x2000) {
-//			System.out.println();
-//		}
-		
-		if (PC == 0x3da) {
-//			print = true;
-		}
-		
-		GenInstruction instruction = getInstruction((int) opcode);
-		instruction.run((int) opcode);
-		
 		PC += 2;
 		
 		return 0;
@@ -145,14 +111,6 @@ public class Gen68 {
 		}
     }
 	
-	private GenInstruction getInstruction(int opcode) {
-		GenInstruction instr = instructions[opcode];
-		if (instr == null) {
-			System.out.println("PC: " + Integer.toHexString((int) PC) + " - INSTR: " + Integer.toHexString(opcode));
-		}
-		return instr;
-	}
-
 	public void setAByte(int register, long data) {
 		long reg = A[register];
 		A[register] = ((reg & 0xFFFF_FF00) | (data & 0xFF));
@@ -681,10 +639,10 @@ public class Gen68 {
 		case 0b1011:
 			taken = isN();
 			break;
-		case 0b1100:	//	BGE – Branch on Greater than or Equal	1) The N and V flags are both clear 2) The N and V flags are both set
+		case 0b1100:	//	BGE ï¿½ Branch on Greater than or Equal	1) The N and V flags are both clear 2) The N and V flags are both set
 			taken = (!isN() && !isV()) || (isN() && isV());
 			break;
-		case 0b1101:	//	BLT – Branch on Lower Than	N (+) V = 1		1) The N flag is clear, but the V flag is set 2) The N flag is set, but the V flag is clear
+		case 0b1101:	//	BLT ï¿½ Branch on Lower Than	N (+) V = 1		1) The N flag is clear, but the V flag is set 2) The N flag is set, but the V flag is clear
 			taken = (!isN() && isV()) || (isN() && !isV());
 			break;
 		case 0b1110:	//	BGT Greater Than     Z + (N (+) V) = 0		1) The Z, N and V flags are all clear 2) The Z flag is clear, but the N and V flags are both set

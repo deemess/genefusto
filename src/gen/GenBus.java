@@ -533,7 +533,7 @@ public class GenBus {
 			int oldSR = cpu.SR;
 			long ssp = cpu.SSP;
 			
-			System.out.println("HINT ! Line: " + Integer.toHexString(vdp.line));
+			//System.out.println("HINT ! Line: " + Integer.toHexString(vdp.line));
 			
 			ssp--;
 			write(ssp, oldPC & 0xFF, Size.BYTE);
