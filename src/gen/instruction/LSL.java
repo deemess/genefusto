@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class LSL implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public LSL(Gen68 cpu) {
+	public LSL(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -100,21 +100,21 @@ public class LSL implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |     -    | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -132,24 +132,24 @@ public class LSL implements GenInstructionHandler {
 	
 	private void generateRegisterShift() {
 		int base = 0xE108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		for (int s = 0; s < 3; s++) {
 			if (s == 0b00) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						LSLRegisterByte(opcode);
 					}
 				};
 			} else if (s == 0b01) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						LSLRegisterWord(opcode);
 					}
 				};
 			} else if (s == 0b10) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						LSLRegisterLong(opcode);
@@ -170,8 +170,8 @@ public class LSL implements GenInstructionHandler {
 	
 	private void generateMemoryShift() {
 		int base = 0xE3C0;
-		GenInstruction ins = null;
-		ins = new GenInstruction() {
+		Instruction ins = null;
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				LSLMemoryWord(opcode);

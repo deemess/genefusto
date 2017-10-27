@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class SBCD implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public SBCD(Gen68 cpu) {
+	public SBCD(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -67,9 +67,9 @@ public class SBCD implements GenInstructionHandler {
 	
 	private void generateDataOperation() {
 		int base = 0x8100;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				SBCDDataByte(opcode);
@@ -86,9 +86,9 @@ public class SBCD implements GenInstructionHandler {
 	
 	private void generateAddressOperation() {
 		int base = 0x8108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				SBCDAddressByte(opcode);

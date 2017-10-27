@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class BCHG implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public BCHG(Gen68 cpu) {
+	public BCHG(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -60,25 +60,25 @@ public class BCHG implements GenInstructionHandler {
 //	--------------------------------- -------------------------------
 //	|Addressing Mode|Mode| Register | |Addressing Mode|Mode|Register|
 //	|-------------------------------| |-----------------------------|
-//	|      Dn *     |000 |N° reg. Dn| |    Abs.W      |111 |  000   |
+//	|      Dn *     |000 |Nï¿½ reg. Dn| |    Abs.W      |111 |  000   |
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |     -    | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    | 
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    | 
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //	 * Long only; for others modes: Byte only.
 //
@@ -95,15 +95,15 @@ public class BCHG implements GenInstructionHandler {
 		generateImmediate(cpu);
 	}
 	
-	private void generateRegister(Gen68 cpu) {
+	private void generateRegister(M68000 cpu) {
 		int base = 0x0140;
-		GenInstruction insByte = new GenInstruction() {
+		Instruction insByte = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				BCHGRegisterByte(opcode);
 			}
 		};
-		GenInstruction insLong = new GenInstruction() {
+		Instruction insLong = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				BCHGRegisterLong(opcode);
@@ -130,15 +130,15 @@ public class BCHG implements GenInstructionHandler {
 		}
 	}
 
-	private void generateImmediate(Gen68 cpu) {
+	private void generateImmediate(M68000 cpu) {
 		int base = 0x0840;
-		GenInstruction insByte = new GenInstruction() {
+		Instruction insByte = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				BCHGImmediateByte(opcode);
 			}
 		};
-		GenInstruction insLong = new GenInstruction() {
+		Instruction insLong = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				BCHGImmediateLong(opcode);

@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class ABCD implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public ABCD(Gen68 cpu) {
+	public ABCD(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -68,9 +68,9 @@ public class ABCD implements GenInstructionHandler {
 	
 	private void generateDataOperation() {
 		int base = 0xC100;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				ABCDDataByte(opcode);
@@ -87,9 +87,9 @@ public class ABCD implements GenInstructionHandler {
 	
 	private void generateAddressOperation() {
 		int base = 0xC108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				ABCDAddressByte(opcode);

@@ -116,12 +116,12 @@ import gen.instruction.UNLK;
 
 public class Genefusto {
 	
-    GenMemory memory;
-    GenVdp vdp;
-    GenBus bus;
-    GenZ80 z80;
-    Gen68 cpu;
-    GenJoypad joypad;
+    Memory memory;
+    VDP vdp;
+    Bus bus;
+    Z80 z80;
+    M68000 cpu;
+    Joypad joypad;
     
     private static int[] pixels;
 
@@ -162,13 +162,13 @@ public class Genefusto {
     final JLabel label = new JLabel(new ImageIcon(img));
 
     Genefusto(boolean debug) {
-    	bus = new GenBus(this, null, null, null, null, null);
+    	bus = new Bus(this, null, null, null, null, null);
         
-    	memory = new GenMemory();
-        vdp = new GenVdp(bus);
-        z80 = new GenZ80(bus);
-        cpu = new Gen68(bus);
-        joypad = new GenJoypad();
+    	memory = new Memory();
+        vdp = new VDP(bus);
+        z80 = new Z80(bus);
+        cpu = new M68000(bus);
+        joypad = new Joypad();
         
         bus.memory = memory;
         bus.vdp = vdp;

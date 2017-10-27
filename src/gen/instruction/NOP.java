@@ -1,13 +1,13 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 
 public class NOP implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public NOP(Gen68 cpu) {
+	public NOP(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -35,9 +35,9 @@ public class NOP implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4E71;
-		GenInstruction ins;
+		Instruction ins;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			
 			@Override
 			public void run(int opcode) {

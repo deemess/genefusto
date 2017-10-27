@@ -1,13 +1,13 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 
 public class MOVE_TO_FROM_USP implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public MOVE_TO_FROM_USP(Gen68 cpu) {
+	public MOVE_TO_FROM_USP(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -43,11 +43,11 @@ public class MOVE_TO_FROM_USP implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4E60;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int dr = 0; dr < 2; dr++) {
 			if (dr == 0) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -55,7 +55,7 @@ public class MOVE_TO_FROM_USP implements GenInstructionHandler {
 					}
 				};
 			} else {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {

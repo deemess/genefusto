@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class MOVE_TO_CCR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public MOVE_TO_CCR(Gen68 cpu) {
+	public MOVE_TO_CCR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -38,25 +38,25 @@ public class MOVE_TO_CCR implements GenInstructionHandler {
 //	--------------------------------- -------------------------------
 //	|Addressing Mode|Mode| Register | |Addressing Mode|Mode|Register|
 //	|-------------------------------| |-----------------------------|
-//	|      Dn       |000 |N° reg. Dn| |    Abs.W      |111 |  000   |
+//	|      Dn       |000 |Nï¿½ reg. Dn| |    Abs.W      |111 |  000   |
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    |111 |  010   |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    |111 |  010   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  |111 |  011   |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  |111 |  011   |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)|111 |  011   |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)|111 |  011   |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      |111 |  100   |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      |111 |  100   |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -69,9 +69,9 @@ public class MOVE_TO_CCR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x44C0;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			
 			@Override
 			public void run(int opcode) {

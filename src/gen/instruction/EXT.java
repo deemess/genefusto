@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class EXT implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public EXT(Gen68 cpu) {
+	public EXT(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -53,11 +53,11 @@ public class EXT implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4800;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int opMode = 2; opMode < 4; opMode++) {
 			if (opMode == 0b010) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -66,7 +66,7 @@ public class EXT implements GenInstructionHandler {
 					
 				};
 			} else if (opMode == 0b011) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {

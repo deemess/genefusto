@@ -1,14 +1,14 @@
 package gen.addressing;
 
-import gen.Gen68;
+import gen.M68000;
 import gen.Size;
 import gen.instruction.Operation;
 
 public class AbsoluteShort implements AddressingMode {
 
-	private Gen68 cpu;
+	private M68000 cpu;
 	
-	public AbsoluteShort(Gen68 cpu) {
+	public AbsoluteShort(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	

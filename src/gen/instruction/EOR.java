@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class EOR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public EOR(Gen68 cpu) {
+	public EOR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -43,25 +43,25 @@ public class EOR implements GenInstructionHandler {
 //	--------------------------------- -------------------------------
 //	|Addressing Mode|Mode| Register | |Addressing Mode|Mode|Register|
 //	|-------------------------------| |-----------------------------|
-//	|      Dn       |000 |N° reg. Dn| |    Abs.W      |111 |  000   |
+//	|      Dn       |000 |Nï¿½ reg. Dn| |    Abs.W      |111 |  000   |
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -74,11 +74,11 @@ public class EOR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0xB000;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int opMode = 0b100; opMode < 7; opMode++) {
 			if (opMode == 0b100) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -87,7 +87,7 @@ public class EOR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b101) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -96,7 +96,7 @@ public class EOR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b110) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {

@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class ANDI_CCR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public ANDI_CCR(Gen68 cpu) {
+	public ANDI_CCR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -43,9 +43,9 @@ public class ANDI_CCR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int opcode = 0x023C;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				ANDICCR(opcode);

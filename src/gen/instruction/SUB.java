@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class SUB implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public SUB(Gen68 cpu) {
+	public SUB(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -46,25 +46,25 @@ public class SUB implements GenInstructionHandler {
 //	--------------------------------- -------------------------------
 //	|Addressing Mode|Mode| Register | |Addressing Mode|Mode|Register|
 //	|-------------------------------| |-----------------------------|
-//	|      Dn       |000 |N° reg. Dn| |    Abs.W      |111 |  000   |
+//	|      Dn       |000 |Nï¿½ reg. Dn| |    Abs.W      |111 |  000   |
 //	|-------------------------------| |-----------------------------|
-//	|      An *     |001 |N° reg. An| |    Abs.L      |111 |  001   |
+//	|      An *     |001 |Nï¿½ reg. An| |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    |111 |  010   |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    |111 |  010   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  |111 |  011   |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  |111 |  011   |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d16,An)    |101 |N° reg. An| |([bd,PC,Xi],od)|111 |  011   |
+//	|   (d16,An)    |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)|111 |  011   |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      |111 |  100   |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      |111 |  100   |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //	 * Word or Long only
 //
@@ -76,21 +76,21 @@ public class SUB implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |     -    | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //	When destination is an Address Register, SUBA instruction is used.
 //
@@ -104,46 +104,46 @@ public class SUB implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x9000;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int opMode = 0; opMode < 7; opMode++) {
 			if (opMode == 0b000) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_DNDest_Byte(opcode);
 					}
 				};
 			} else if (opMode == 0b001) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_DNDest_Word(opcode);
 					}
 				};
 			} else if (opMode == 0b010) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_DNDest_Long(opcode);
 					}
 				};
 			} else if (opMode == 0b100) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_EADest_Byte(opcode);
 					}
 				};
 			} else if (opMode == 0b101) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_EADest_Word(opcode);
 					}
 				};
 			} else if (opMode == 0b110) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						SUB_EADest_Long(opcode);

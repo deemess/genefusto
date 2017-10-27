@@ -1,14 +1,14 @@
 package gen.addressing;
 
-import gen.Gen68;
+import gen.M68000;
 import gen.Size;
 import gen.instruction.Operation;
 
 public class AddressRegisterIndirectPostIncrement implements AddressingMode {
 
-	private Gen68 cpu;
+	private M68000 cpu;
 	
-	public AddressRegisterIndirectPostIncrement(Gen68 cpu) {
+	public AddressRegisterIndirectPostIncrement(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	

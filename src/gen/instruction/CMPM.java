@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class CMPM implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public CMPM(Gen68 cpu) {
+	public CMPM(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -53,24 +53,24 @@ public class CMPM implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0xB108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		for (int size = 0; size < 3; size++) {
 			if (size == 0b00) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						CMPMByte(opcode);
 					}
 				};
 			} else if (size == 0b01) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						CMPMWord(opcode);
 					}
 				};
 			} else if (size == 0b10) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						CMPMLong(opcode);

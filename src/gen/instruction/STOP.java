@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class STOP implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public STOP(Gen68 cpu) {
+	public STOP(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -44,9 +44,9 @@ public class STOP implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4E72;
-		GenInstruction ins;
+		Instruction ins;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			
 			@Override
 			public void run(int opcode) {

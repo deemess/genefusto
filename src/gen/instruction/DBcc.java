@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class DBcc implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public DBcc(Gen68 cpu) {
+	public DBcc(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -59,10 +59,10 @@ public class DBcc implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x50C8;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int cc = 0; cc < 16; cc++) {
-			ins = new GenInstruction() {
+			ins = new Instruction() {
 				@Override
 				public void run(int opcode) {
 					DBccWord(opcode);

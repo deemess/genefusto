@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class OR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public OR(Gen68 cpu) {
+	public OR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -48,46 +48,46 @@ public class OR implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //	If <ea> specifies source operand, addressing modes allowed are:
 //	--------------------------------- -------------------------------
 //	|Addressing Mode|Mode| Register | |Addressing Mode|Mode|Register|
 //	|-------------------------------| |-----------------------------|
-//	|      Dn       |000 |N° reg. Dn| |    Abs.W      |111 |  000   |
+//	|      Dn       |000 |Nï¿½ reg. Dn| |    Abs.W      |111 |  000   |
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    |111 |  010   |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    |111 |  010   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  |111 |  011   |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  |111 |  011   |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)|111 |  011   |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)|111 |  011   |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      |111 |  100   |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      |111 |  100   |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -100,11 +100,11 @@ public class OR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x8000;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int opMode = 0; opMode < 3; opMode++) {
 			if (opMode == 0b000) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -113,7 +113,7 @@ public class OR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b001) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -122,7 +122,7 @@ public class OR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b010) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -152,7 +152,7 @@ public class OR implements GenInstructionHandler {
 		
 		for (int opMode = 4; opMode < 7; opMode++) {
 			if (opMode == 0b100) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -161,7 +161,7 @@ public class OR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b101) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -170,7 +170,7 @@ public class OR implements GenInstructionHandler {
 
 				};
 			} else if (opMode == 0b110) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {

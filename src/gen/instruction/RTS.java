@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class RTS implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public RTS(Gen68 cpu) {
+	public RTS(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -34,9 +34,9 @@ public class RTS implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4E75;
-		GenInstruction ins;
+		Instruction ins;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			
 			@Override
 			public void run(int opcode) {

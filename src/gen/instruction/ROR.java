@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class ROR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public ROR(Gen68 cpu) {
+	public ROR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -94,21 +94,21 @@ public class ROR implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |     -    | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)+     |011 |N° reg. An| |   (d8,PC,Xi)  | -  |   -    |
+//	|     (An)+     |011 |Nï¿½ reg. An| |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -121,26 +121,26 @@ public class ROR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0xE018;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		for (int dr = 0; dr < 2; dr++) {
 			if (dr == 0) {
 				for (int s = 0; s < 3; s++) {
 					if (s == 0b00) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								RORRegisterByte(opcode);
 							}
 						};
 					} else if (s == 0b01) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								RORRegisterWord(opcode);
 							}
 						};
 					} else if (s == 0b10) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								RORRegisterLong(opcode);
@@ -160,21 +160,21 @@ public class ROR implements GenInstructionHandler {
 			} else {
 				for (int s = 0; s < 3; s++) {
 					if (s == 0b00) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								ROLRegisterByte(opcode);
 							}
 						};
 					} else if (s == 0b01) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								ROLRegisterWord(opcode);
 							}
 						};
 					} else if (s == 0b10) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								ROLRegisterLong(opcode);

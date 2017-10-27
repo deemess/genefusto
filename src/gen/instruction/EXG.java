@@ -1,13 +1,13 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 
 public class EXG implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public EXG(Gen68 cpu) {
+	public EXG(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -48,13 +48,13 @@ public class EXG implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0xC100;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		int opMode = 0;
 		for (int i = 0; i < 3; i++) {
 			if (i == 0) {
 				opMode = 0b01000;
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -64,7 +64,7 @@ public class EXG implements GenInstructionHandler {
 				};
 			} else if (i == 1) {
 				opMode = 0b01001;
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {
@@ -74,7 +74,7 @@ public class EXG implements GenInstructionHandler {
 				};
 			} else if (i == 2) {
 				opMode = 0b10001;
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					
 					@Override
 					public void run(int opcode) {

@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class JSR implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public JSR(Gen68 cpu) {
+	public JSR(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -42,21 +42,21 @@ public class JSR implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    |111 |  010   |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    |111 |  010   |
 //	|-------------------------------| |-----------------------------|
 //	|     (An)+     | -  |    -     | |   (d8,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
 //	|    -(An)      | -  |    -     | |   (bd,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)|111 |  011   |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)|111 |  011   |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -65,9 +65,9 @@ public class JSR implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4E80;
-		GenInstruction ins;
+		Instruction ins;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			
 			@Override
 			public void run(int opcode) {

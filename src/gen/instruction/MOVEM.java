@@ -1,7 +1,7 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 import gen.addressing.AbsoluteLong;
 import gen.addressing.AbsoluteShort;
@@ -15,9 +15,9 @@ import gen.addressing.PCWithIndex;
 
 public class MOVEM implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public MOVEM(Gen68 cpu) {
+	public MOVEM(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -99,21 +99,21 @@ public class MOVEM implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    | -  |   -    |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    | -  |   -    |
 //	|-------------------------------| |-----------------------------|
 //	|     (An)+     | -  |    -     | |   (d8,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  | -  |   -    |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  | -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)| -  |   -    |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)| -  |   -    |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)| -  |   -    |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //	Move from memory to registers, addressing modes allowed are:
@@ -124,21 +124,21 @@ public class MOVEM implements GenInstructionHandler {
 //	|-------------------------------| |-----------------------------|
 //	|      An       | -  |    -     | |    Abs.L      |111 |  001   |
 //	|-------------------------------| |-----------------------------|
-//	|     (An)      |010 |N° reg. An| |   (d16,PC)    |111 |  010   |
+//	|     (An)      |010 |Nï¿½ reg. An| |   (d16,PC)    |111 |  010   |
 //	|-------------------------------| |-----------------------------|
 //	|     (An)+     | -  |    -     | |   (d8,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    -(An)      |100 |N° reg. An| |   (bd,PC,Xi)  |111 |  011   |
+//	|    -(An)      |100 |Nï¿½ reg. An| |   (bd,PC,Xi)  |111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|    (d16,An)   |101 |N° reg. An| |([bd,PC,Xi],od)|111 |  011   |
+//	|    (d16,An)   |101 |Nï¿½ reg. An| |([bd,PC,Xi],od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (d8,An,Xi)  |110 |N° reg. An| |([bd,PC],Xi,od)|111 |  011   |
+//	|   (d8,An,Xi)  |110 |Nï¿½ reg. An| |([bd,PC],Xi,od)|111 |  011   |
 //	|-------------------------------| |-----------------------------|
-//	|   (bd,An,Xi)  |110 |N° reg. An| |    #data      | -  |   -    |
+//	|   (bd,An,Xi)  |110 |Nï¿½ reg. An| |    #data      | -  |   -    |
 //	|-------------------------------| -------------------------------
-//	|([bd,An,Xi]od) |110 |N° reg. An|
+//	|([bd,An,Xi]od) |110 |Nï¿½ reg. An|
 //	|-------------------------------|
-//	|([bd,An],Xi,od)|110 |N° reg. An|
+//	|([bd,An],Xi,od)|110 |Nï¿½ reg. An|
 //	---------------------------------
 //
 //RESULT
@@ -147,20 +147,20 @@ public class MOVEM implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4880;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int dr = 0; dr < 2; dr++) {
 			if (dr == 0) {
 				for (int s = 0; s < 2; s++) {
 					if (s == 0) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								MOVEMRegsToMemWord(opcode);
 							}
 						};
 					} else if (s == 1) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								MOVEMRegsToMemLong(opcode);
@@ -186,14 +186,14 @@ public class MOVEM implements GenInstructionHandler {
 			} else if (dr == 1) {
 				for (int s = 0; s < 2; s++) {
 					if (s == 0) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								MOVEMMemToRegsWord(opcode);
 							}
 						};
 					} else if (s == 1) {
-						ins = new GenInstruction() {
+						ins = new Instruction() {
 							@Override
 							public void run(int opcode) {
 								MOVEMMemToRegsLong(opcode);

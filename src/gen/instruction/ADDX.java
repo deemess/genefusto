@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class ADDX implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public ADDX(Gen68 cpu) {
+	public ADDX(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -70,11 +70,11 @@ public class ADDX implements GenInstructionHandler {
 	
 	private void generateDataOperation() {
 		int base = 0xD100;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int size = 0; size < 3; size++) {
 			if (size == 0b00) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXDataByte(opcode);
@@ -82,7 +82,7 @@ public class ADDX implements GenInstructionHandler {
 				};
 				
 			} else if (size == 0b01) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXDataWord(opcode);
@@ -90,7 +90,7 @@ public class ADDX implements GenInstructionHandler {
 				};
 				
 			} else if (size == 0b10) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXDataLong(opcode);
@@ -110,11 +110,11 @@ public class ADDX implements GenInstructionHandler {
 	
 	private void generateAddressOperation() {
 		int base = 0xD108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
 		for (int size = 0; size < 3; size++) {
 			if (size == 0b00) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXAddressByte(opcode);
@@ -122,7 +122,7 @@ public class ADDX implements GenInstructionHandler {
 				};
 				
 			} else if (size == 0b01) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXAddressWord(opcode);
@@ -130,7 +130,7 @@ public class ADDX implements GenInstructionHandler {
 				};
 				
 			} else if (size == 0b10) {
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						ADDXAddressLong(opcode);

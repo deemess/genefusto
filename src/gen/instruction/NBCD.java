@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class NBCD implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public NBCD(Gen68 cpu) {
+	public NBCD(M68000 cpu) {
 		this.cpu = cpu;
 	}
 
@@ -48,9 +48,9 @@ public class NBCD implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x4800;
-		GenInstruction ins = null;
+		Instruction ins = null;
 		
-		ins = new GenInstruction() {
+		ins = new Instruction() {
 			@Override
 			public void run(int opcode) {
 				NBCDDataByte(opcode);

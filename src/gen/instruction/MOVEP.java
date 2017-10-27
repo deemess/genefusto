@@ -1,14 +1,14 @@
 package gen.instruction;
 
-import gen.Gen68;
-import gen.GenInstruction;
+import gen.M68000;
+import gen.Instruction;
 import gen.Size;
 
 public class MOVEP implements GenInstructionHandler {
 
-	final Gen68 cpu;
+	final M68000 cpu;
 	
-	public MOVEP(Gen68 cpu) {
+	public MOVEP(M68000 cpu) {
 		this.cpu = cpu;
 	}
 	
@@ -63,12 +63,12 @@ public class MOVEP implements GenInstructionHandler {
 	@Override
 	public void generate() {
 		int base = 0x0108;
-		GenInstruction ins = null;
+		Instruction ins = null;
 
 		for (int opMode = 0; opMode < 4; opMode++) {
 			if (opMode == 0b00) {
 				
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						MOVEPMemToRegWord(opcode);
@@ -76,7 +76,7 @@ public class MOVEP implements GenInstructionHandler {
 				};
 			} else if (opMode == 0b01) {
 				
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						MOVEPMemToRegLong(opcode);
@@ -84,7 +84,7 @@ public class MOVEP implements GenInstructionHandler {
 				};
 			} else if (opMode == 0b10) {
 				
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						MOVEPRegToMemWord(opcode);
@@ -92,7 +92,7 @@ public class MOVEP implements GenInstructionHandler {
 				};
 			} else if (opMode == 0b11) {
 				
-				ins = new GenInstruction() {
+				ins = new Instruction() {
 					@Override
 					public void run(int opcode) {
 						MOVEPRegToMemLong(opcode);
