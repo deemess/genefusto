@@ -4,6 +4,57 @@ import java.util.Random;
 
 //info z80 bus
 //https://emu-docs.org/Genesis/gen-hw.txt
+//    1.) 68000 memory map
+//
+//    000000-3FFFFFh : ROM
+//    400000-7FFFFFh : Unused (1)
+//    800000-9FFFFFh : Unused (2)
+//    A00000-A0FFFFh : Z80 address space (3)
+//    A10000-A1001Fh : I/O
+//    A10020-BFFFFFh : Internal registers and expansion (4)
+//    C00000-DFFFFFh : VDP (5)
+//    E00000-FFFFFFh : RAM (6)
+//
+//    1. Reads return the MSB of the next instruction to be fetched, with the
+//    LSB set to zero. Writes do nothing.
+//
+//    2. Reading or writing any address will lock up the machine.
+//    This area is used for the 32X adapter.
+//
+//    3. Addresses A08000-A0FFFFh mirror A00000-A07FFFh, so the 68000 cannot
+//    access it's own banked memory. All addresses are valid except for
+//    the VDP which is at A07F00-A07FFFh and A0FF00-A0FFFFh, writing or
+//    reading those addresses will lock up the machine.
+//
+//    4. Reading some addresses lock up the machine, others return the MSB
+//    of the next instruction to be fetched with the LSB is set to zero.
+//
+//    The latter applies when reading A11100h (except for bit 0 reflects
+//    the state of the bus request) and A11200h.
+//
+//    Valid addresses in this area change depending on the peripherals
+//    and cartridges being used; the 32X, Sega CD, and games like Super
+//    Street Fighter II and Phantasy Star 4 use addresses within this range.
+//
+//    5. The VDP is mirrored at certain locations from C00000h to DFFFFFh. In
+//    order to explain what addresses are valid, here is a layout of each
+//    address bit:
+//
+//    MSB                       LSB
+//    110n n000 nnnn nnnn 000m mmmm
+//
+//    '1' - This bit must be 1.
+//    '0' - This bit must be 0.
+//    'n' - This bit can have any value.
+//    'm' - VDP addresses (00-1Fh)
+//
+//    For example, you could read the status port at D8FF04h or C0A508h,
+//    but not D00084h or CF00008h. Accessing invalid addresses will
+//    lock up the machine.
+//
+//    6. The RAM is 64K in size and is repeatedly mirrored throughout the entire
+//    range it appears in. Most games only access it at FF0000-FFFFFFh.
+
 public class Bus {
 
 	Genefusto emu;
@@ -69,7 +120,7 @@ public class Bus {
 					}
 					
 				} else {
-					data = memory.readCartridgeByte(address);
+					data = memory.readCartridgeByte((int)address);
 				}
 				
 			} else if (size == OperationSize.WORD) {
@@ -99,45 +150,52 @@ public class Bus {
 			
 		}
 		
-		if (address <= 0x3F_FFFF) {
-			if (size == OperationSize.BYTE) {
-				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
-					address = address - 0x200000;
-					if (address < 0x200) {
-						data = sram[(int) address];
-					} else {
-						data = 0;
-					}
-					
-				} else {
-					data = memory.readCartridgeByte(address);
-				}
-				
-			} else if (size == OperationSize.WORD) {
-				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
-					address = address - 0x200000;
-					data  = sram[(int) address] << 8;
-					data |= sram[(int) address + 1];
-				} else {
-					data = memory.readCartridgeWord(address);
-				}
-				
-			} else {
-				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
-					address = address - 0x200000;
-					data  = sram[(int) address] << 24;
-					data |= sram[(int) address + 1] << 16;
-					data |= sram[(int) address + 2] << 8;
-					data |= sram[(int) address + 3];
-					
-				} else {
-					data  = memory.readCartridgeWord(address) << 16;
-					data |= memory.readCartridgeWord(address + 2);
-					
-				}
-			}
-			return data;
-			
+		if (address <= 0x3F_FFFF) { // 000000-3FFFFFh : ROM
+            //0x200000 - 0x20FFFF : SRAM
+            if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
+                int alignedAddress = (int)address & 0x0000FFFF;
+                return memory.readSRAM(alignedAddress, size);
+            } else {
+                return memory.readROM((int) address, size);
+            }
+
+//			if (size == OperationSize.BYTE) {
+//				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
+//					address = address - 0x200000;
+//					if (address < 0x200) {
+//						data = sram[(int) address];
+//					} else {
+//						data = 0;
+//					}
+//
+//				} else {
+//					data = memory.readCartridgeByte((int)address);
+//				}
+//
+//			} else if (size == OperationSize.WORD) {
+//				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
+//					address = address - 0x200000;
+//					data  = sram[(int) address] << 8;
+//					data |= sram[(int) address + 1];
+//				} else {
+//					data = memory.readCartridgeWord(address);
+//				}
+//
+//			} else {
+//				if (address >= 0x200000 && address <= 0x20FFFF && writeSram) {
+//					address = address - 0x200000;
+//					data  = sram[(int) address] << 24;
+//					data |= sram[(int) address + 1] << 16;
+//					data |= sram[(int) address + 2] << 8;
+//					data |= sram[(int) address + 3];
+//
+//				} else {
+//					data  = memory.readCartridgeWord(address) << 16;
+//					data |= memory.readCartridgeWord(address + 2);
+//
+//				}
+//			}
+//			return data;
 		} else if (address >= 0xA00000 && address <= 0xA0FFFF) {	//	Z80 addressing space
 			return z80.readMemory((int) (address - 0xA00000));
 			
@@ -228,20 +286,25 @@ public class Bus {
 				}
 			}
 			
-		} else if (address >= 0xFF0000) {
-			if (size == OperationSize.BYTE) {
-				return memory.readRam(address);
-			} else if (size == OperationSize.WORD) {
-				data  = memory.readRam(address) << 8;
-				data |= memory.readRam(address + 1);
-				return data;
-			} else {
-				data  = memory.readRam(address) << 24;
-				data |= memory.readRam(address + 1) << 16;
-				data |= memory.readRam(address + 2) << 8;
-				data |= memory.readRam(address + 3);
-				return data;
-			}
+		} else if (address >= 0xFF0000) {//    E00000-FFFFFFh : RAM (6)
+            //    6. The RAM is 64K in size and is repeatedly mirrored throughout the entire
+            //    range it appears in. Most games only access it at FF0000-FFFFFFh.
+
+            int alignedAddress = (int)address & 0x0000FFFF;
+            return memory.readRAM(alignedAddress, size);
+//			if (size == OperationSize.BYTE) {
+//				return memory.readRam(address);
+//			} else if (size == OperationSize.WORD) {
+//				data  = memory.readRam(address) << 8;
+//				data |= memory.readRam(address + 1);
+//				return data;
+//			} else {
+//				data  = memory.readRam(address) << 24;
+//				data |= memory.readRam(address + 1) << 16;
+//				data |= memory.readRam(address + 2) << 8;
+//				data |= memory.readRam(address + 3);
+//				return data;
+//			}
 			
 		} else {
 			System.out.println("NOT MAPPED: " + pad4(address) + " - " + pad4(cpu.PC));
@@ -263,25 +326,27 @@ public class Bus {
 		
 		if (addressL <= 0x3FFFFF) {	//	Cartridge ROM/RAM
 			if (addressL >= 0x200000 && address <= 0x20FFFF && writeSram) {
-				addressL = addressL - 0x200000;
-				
-				if (size == OperationSize.BYTE) {
-					if (address < 0x200) {
-						sram[(int) addressL] = (int) data;
-					}
-					
-				} else if (size == OperationSize.WORD) {
-					sram[(int) addressL] = (int) (data >> 8) & 0xFF;
-					sram[(int) addressL + 1] = (int) data & 0xFF;
-				} else {
-					sram[(int) addressL] = (int) (data >> 24) & 0xFF;
-					sram[(int) addressL + 1] = (int) (data >> 16) & 0xFF;
-					sram[(int) addressL + 2] = (int) (data >> 8) & 0xFF;
-					sram[(int) addressL + 3] = (int) data & 0xFF;
-				}
+			    int alignedAdress = (int)address & 0x0FFFF;
+			    memory.writeSRAM(alignedAdress, (int)data, size);
+//				addressL = addressL - 0x200000;
+//
+//				if (size == OperationSize.BYTE) {
+//					if (address < 0x200) {
+//						sram[(int) addressL] = (int) data;
+//					}
+//
+//				} else if (size == OperationSize.WORD) {
+//					sram[(int) addressL] = (int) (data >> 8) & 0xFF;
+//					sram[(int) addressL + 1] = (int) data & 0xFF;
+//				} else {
+//					sram[(int) addressL] = (int) (data >> 24) & 0xFF;
+//					sram[(int) addressL + 1] = (int) (data >> 16) & 0xFF;
+//					sram[(int) addressL + 2] = (int) (data >> 8) & 0xFF;
+//					sram[(int) addressL + 3] = (int) data & 0xFF;
+//				}
 				
 			} else {
-				System.out.println("write cart rom ram ? " + Integer.toHexString((int) addressL));
+				System.out.println("write to rom? " + Integer.toHexString((int) addressL));
 			}
 			
 		} else if (addressL >= 0xA00000 && addressL <= 0xA0FFFF) {	//	Z80 addressing space

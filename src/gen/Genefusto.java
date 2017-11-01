@@ -490,7 +490,7 @@ public class Genefusto {
 //                memory.cartridgeMemory = GBFileLoader.readZipFile(file);
             } else if (file.getName().toLowerCase().endsWith(".md")
             		|| file.getName().toLowerCase().endsWith(".bin")) {
-                memory.cartridge = FileLoader.readFile(file);
+                memory.rom = FileLoader.readFile(file);
             }
         
             String rom = file.getName();
@@ -514,7 +514,7 @@ public class Genefusto {
             
             boolean isSsf2Mapper = true;
             for (int i = 0; i < ssf2Title.length; i++) {
-            	if (memory.cartridge[0x150 + i] != ssf2Title[i]) {
+            	if (memory.rom[0x150 + i] != ssf2Title[i]) {
             		isSsf2Mapper = false;
             	}
 			}
@@ -522,7 +522,7 @@ public class Genefusto {
             if (!isSsf2Mapper) {
             	isSsf2Mapper = true;
             	for (int i = 0; i < titanOverdrive2Title.length; i++) {
-            		if (memory.cartridge[0x150 + i] != titanOverdrive2Title[i]) {
+            		if (memory.rom[0x150 + i] != titanOverdrive2Title[i]) {
             			isSsf2Mapper = false;
             		}
             	}
